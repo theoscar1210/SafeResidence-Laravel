@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { ClipboardList, LayoutGrid, LogIn, Shield, Users } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import {
@@ -14,28 +13,34 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { Auth, NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const { auth } = usePage<{ auth: Auth }>().props;
+const role = auth?.user?.role ?? '';
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
+const navByRole: Record<string, NavItem[]> = {
+    Administrador: [
+        { title: 'Dashboard', href: '/admin/dashboard', icon: LayoutGrid },
+        { title: 'Usuarios',  href: '/admin/users',     icon: Users },
+        { title: 'Ingresos',  href: '/admin/entries',   icon: ClipboardList },
+    ],
+    Vigilante: [
+        { title: 'Dashboard',           href: '/vigilante/dashboard',      icon: LayoutGrid },
+        { title: 'Registrar Ingreso',   href: '/vigilante/entries/create', icon: LogIn },
+        { title: 'Monitor de Ingresos', href: '/vigilante/entries',        icon: ClipboardList },
+        { title: 'Autorizaciones',      href: '/vigilante/authorizations', icon: Shield },
+    ],
+    Propietario: [
+        { title: 'Dashboard',          href: '/propietario/dashboard',      icon: LayoutGrid },
+        { title: 'Mis Autorizaciones', href: '/propietario/authorizations', icon: Shield },
+    ],
+    Residente: [
+        { title: 'Dashboard', href: '/residente/dashboard', icon: LayoutGrid },
+    ],
+};
+
+const mainNavItems: NavItem[] = navByRole[role] ?? [
+    { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid },
 ];
 </script>
 
@@ -45,7 +50,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                        <Link href="/dashboard">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
@@ -58,7 +63,6 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>

@@ -113,7 +113,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
     <AppLayout>
         <Head title="Registrar Ingreso" />
 
-        <div class="mx-auto max-w-2xl p-6">
+        <div class="mx-auto max-w-2xl p-4 sm:p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold">Registrar Ingreso</h1>
                 <p class="text-sm text-muted-foreground">
@@ -208,7 +208,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                 </div>
 
                 <!-- Nombres y apellidos -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="first_name">Nombres *</Label>
                         <Input

@@ -83,7 +83,7 @@ watch(
     <AppLayout>
         <Head title="Historial de Visitas" />
 
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <!-- Header -->
             <div>
                 <h1 class="text-2xl font-bold">Historial de Visitas</h1>
@@ -97,8 +97,8 @@ watch(
             </div>
 
             <!-- Filtros -->
-            <div class="flex flex-wrap items-end gap-3">
-                <div class="grid w-40 gap-1">
+            <div class="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
+                <div class="grid gap-1 sm:w-40">
                     <label class="text-xs font-medium text-muted-foreground"
                         >Tipo</label
                     >
@@ -119,7 +119,7 @@ watch(
                     <Input
                         v-model="localFilters.date_from"
                         type="date"
-                        class="w-40"
+                        class="w-full sm:w-40"
                     />
                 </div>
                 <div class="grid gap-1">
@@ -129,7 +129,7 @@ watch(
                     <Input
                         v-model="localFilters.date_to"
                         type="date"
-                        class="w-40"
+                        class="w-full sm:w-40"
                     />
                 </div>
             </div>
@@ -236,7 +236,7 @@ watch(
             <!-- Paginación -->
             <div
                 v-if="entries.last_page > 1"
-                class="flex items-center justify-between text-sm"
+                class="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between"
             >
                 <p class="text-muted-foreground">
                     Mostrando {{ entries.from }}–{{ entries.to }} de

@@ -46,7 +46,7 @@ const typeLabel: Record<string, string> = {
 <template>
     <AppLayout>
         <Head title="Dashboard Vigilante" />
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <!-- Header -->
             <div
                 class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between"
@@ -207,7 +207,7 @@ const typeLabel: Record<string, string> = {
             </div>
 
             <!-- Tabla: personas actualmente dentro -->
-            <div class="rounded-xl border bg-card shadow-sm">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <div
                     class="flex items-center justify-between border-b px-5 py-4"
                 >

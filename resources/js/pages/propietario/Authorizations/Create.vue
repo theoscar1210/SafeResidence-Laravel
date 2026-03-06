@@ -25,7 +25,7 @@ function submit() {
     <AppLayout>
         <Head title="Nueva Autorización" />
 
-        <div class="mx-auto max-w-2xl p-6">
+        <div class="mx-auto max-w-2xl p-4 sm:p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold">Nueva Autorización</h1>
                 <p class="text-sm text-muted-foreground">
@@ -38,7 +38,7 @@ function submit() {
                 class="space-y-5 rounded-xl border bg-card p-6 shadow-sm"
             >
                 <!-- Nombres y apellidos -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="first_name">Nombres *</Label>
                         <Input
@@ -60,7 +60,7 @@ function submit() {
                 </div>
 
                 <!-- Cédula y tipo -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="cedula">Cédula *</Label>
                         <Input
@@ -87,7 +87,7 @@ function submit() {
                 </div>
 
                 <!-- Fechas -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="start_date">Fecha de inicio *</Label>
                         <Input

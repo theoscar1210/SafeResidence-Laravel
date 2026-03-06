@@ -47,8 +47,8 @@ function destroy(id: number, name: string) {
 <template>
     <AppLayout>
         <Head title="Usuarios" />
-        <div class="flex flex-col gap-6 p-6">
-            <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Usuarios</h1>
                     <p class="text-sm text-muted-foreground">
@@ -63,10 +63,10 @@ function destroy(id: number, name: string) {
             <Input
                 v-model="search"
                 placeholder="Buscar por nombre, usuario, cédula o correo..."
-                class="max-w-sm"
+                class="w-full sm:max-w-sm"
             />
 
-            <div class="rounded-xl border bg-card shadow-sm">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <table class="w-full text-sm">
                     <thead class="bg-muted/50">
                         <tr>

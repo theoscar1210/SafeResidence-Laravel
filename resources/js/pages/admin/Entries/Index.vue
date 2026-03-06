@@ -90,7 +90,7 @@ const hasFilters = () =>
     <AppLayout>
         <Head title="Historial de Accesos" />
 
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <!-- Header -->
             <div
                 class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between"
@@ -269,7 +269,7 @@ const hasFilters = () =>
             <!-- Paginación -->
             <div
                 v-if="entries.last_page > 1"
-                class="flex items-center justify-between text-sm"
+                class="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between"
             >
                 <p class="text-muted-foreground">
                     Mostrando {{ entries.from }}–{{ entries.to }} de

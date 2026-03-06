@@ -42,7 +42,7 @@ const typeLabel: Record<string, string> = {
     <AppLayout>
         <Head title="Autorizaciones Activas" />
 
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Autorizaciones Activas</h1>
@@ -73,7 +73,7 @@ const typeLabel: Record<string, string> = {
                 <div
                     v-for="auth in filtered"
                     :key="auth.id"
-                    class="flex items-start justify-between rounded-xl border bg-card p-5 shadow-sm"
+                    class="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-start sm:justify-between"
                 >
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2">
@@ -107,7 +107,7 @@ const typeLabel: Record<string, string> = {
                     <!-- Botón rápido de registrar ingreso -->
                     <Link
                         :href="`/vigilante/entries/create?cedula=${auth.cedula}`"
-                        class="ml-4 shrink-0"
+                        class="shrink-0 self-start"
                     >
                         <Button size="sm" variant="outline"
                             >Registrar ingreso</Button

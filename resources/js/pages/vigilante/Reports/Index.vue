@@ -65,7 +65,7 @@ async function exportReport() {
     <AppLayout>
         <Head title="Reportes" />
 
-        <div class="mx-auto max-w-2xl p-6">
+        <div class="mx-auto max-w-2xl p-4 sm:p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold">Generar Reporte</h1>
                 <p class="text-sm text-muted-foreground">
@@ -103,7 +103,7 @@ async function exportReport() {
                 </div>
 
                 <!-- Rango de fechas -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="date_from">Fecha desde</Label>
                         <Input

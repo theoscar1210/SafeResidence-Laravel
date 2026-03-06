@@ -35,7 +35,7 @@ const typeClass: Record<string, string> = {
 <template>
     <AppLayout>
         <Head title="Dashboard Propietario" />
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <div>
                 <h1 class="text-2xl font-bold">Mi Panel</h1>
                 <p class="text-muted-foreground">
@@ -71,7 +71,7 @@ const typeClass: Record<string, string> = {
                 </div>
             </div>
 
-            <div class="rounded-xl border bg-card shadow-sm">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <div
                     class="flex items-center justify-between border-b px-5 py-4"
                 >

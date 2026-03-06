@@ -34,7 +34,7 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
 <template>
     <AppLayout>
         <Head title="Panel Administrador" />
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
             <div>
                 <h1 class="text-2xl font-bold">Panel de Administración</h1>
                 <p class="text-muted-foreground">
@@ -91,7 +91,7 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
                 </div>
             </div>
 
-            <div class="rounded-xl border bg-card shadow-sm">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <div class="border-b px-5 py-4">
                     <h2 class="font-semibold">Últimos ingresos del día</h2>
                 </div>

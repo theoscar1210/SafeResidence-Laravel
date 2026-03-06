@@ -41,8 +41,8 @@ const typeLabel: Record<string, string> = {
     <AppLayout>
         <Head title="Mis Autorizaciones" />
 
-        <div class="flex flex-col gap-6 p-6">
-            <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Mis Autorizaciones</h1>
                     <p class="text-sm text-muted-foreground">
@@ -82,7 +82,7 @@ const typeLabel: Record<string, string> = {
                 <div
                     v-for="auth in authorizations"
                     :key="auth.id"
-                    class="flex items-start justify-between rounded-xl border bg-card p-5 shadow-sm"
+                    class="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-start sm:justify-between"
                 >
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2">
@@ -116,7 +116,7 @@ const typeLabel: Record<string, string> = {
                     <button
                         v-if="auth.status === 'activo'"
                         @click="destroy(auth.id)"
-                        class="ml-4 shrink-0 rounded-md px-3 py-1.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
+                        class="shrink-0 self-start rounded-md px-3 py-1.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
                     >
                         Eliminar
                     </button>

@@ -27,7 +27,7 @@ function submit() {
 <template>
     <AppLayout>
         <Head title="Nuevo Usuario" />
-        <div class="mx-auto max-w-2xl p-6">
+        <div class="mx-auto max-w-2xl p-4 sm:p-6">
             <div class="mb-6 flex items-center gap-4">
                 <Link
                     href="/admin/users"
@@ -46,7 +46,7 @@ function submit() {
                 @submit.prevent="submit"
                 class="space-y-5 rounded-xl border bg-card p-6 shadow-sm"
             >
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="first_name">Nombres *</Label>
                         <Input id="first_name" v-model="form.first_name" />
@@ -69,7 +69,7 @@ function submit() {
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="cedula">Cédula *</Label>
                         <Input id="cedula" v-model="form.cedula" />
@@ -131,7 +131,7 @@ function submit() {
                     </p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid gap-4 sm:grid-cols-2">
                     <div class="grid gap-1.5">
                         <Label for="password">Contraseña *</Label>
                         <Input

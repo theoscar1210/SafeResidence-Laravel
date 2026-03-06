@@ -77,8 +77,8 @@ const typeLabel: Record<string, string> = {
     <AppLayout>
         <Head title="Registrar Salidas" />
 
-        <div class="flex flex-col gap-6 p-6">
-            <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-6 p-4 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Registrar Salidas</h1>
                     <p class="text-sm text-muted-foreground">
@@ -115,12 +115,12 @@ const typeLabel: Record<string, string> = {
 
             <template v-else>
                 <!-- Búsqueda y seleccionar todos -->
-                <div class="flex items-center gap-3">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <input
                         v-model="search"
                         type="text"
                         placeholder="Buscar por nombre, cédula o apartamento..."
-                        class="flex h-9 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground"
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground sm:max-w-sm"
                     />
                     <button
                         @click="toggleAll"

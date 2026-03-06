@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
 use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:Administrador')->prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::get('entries', [AdminEntryController::class, 'index'])->name('entries.index');
     });
 
     // Vigilante

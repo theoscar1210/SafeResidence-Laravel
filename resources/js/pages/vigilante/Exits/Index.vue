@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 interface Entry {
     id: number;
@@ -78,7 +78,6 @@ const typeLabel: Record<string, string> = {
         <Head title="Registrar Salidas" />
 
         <div class="flex flex-col gap-6 p-6">
-
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Registrar Salidas</h1>
@@ -92,7 +91,9 @@ const typeLabel: Record<string, string> = {
                     class="min-w-36"
                 >
                     Registrar salida
-                    <span v-if="selected.length > 0" class="ml-1">({{ selected.length }})</span>
+                    <span v-if="selected.length > 0" class="ml-1"
+                        >({{ selected.length }})</span
+                    >
                 </Button>
             </div>
 
@@ -125,7 +126,11 @@ const typeLabel: Record<string, string> = {
                         @click="toggleAll"
                         class="text-sm text-primary underline-offset-4 hover:underline"
                     >
-                        {{ selected.length === filtered.length ? 'Deseleccionar todos' : 'Seleccionar todos' }}
+                        {{
+                            selected.length === filtered.length
+                                ? 'Deseleccionar todos'
+                                : 'Seleccionar todos'
+                        }}
                     </button>
                 </div>
 
@@ -151,17 +156,31 @@ const typeLabel: Record<string, string> = {
                                     : 'border-muted-foreground',
                             ]"
                         >
-                            <svg v-if="selected.includes(entry.id)" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg
+                                v-if="selected.includes(entry.id)"
+                                class="h-3 w-3"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M5 13l4 4L19 7"
+                                />
                             </svg>
                         </div>
 
                         <!-- Info -->
                         <div class="flex flex-1 items-center justify-between">
                             <div>
-                                <p class="font-semibold">{{ entry.full_name }}</p>
+                                <p class="font-semibold">
+                                    {{ entry.full_name }}
+                                </p>
                                 <p class="text-sm text-muted-foreground">
-                                    CC {{ entry.cedula }} · Apto {{ entry.apartment }}
+                                    CC {{ entry.cedula }} · Apto
+                                    {{ entry.apartment }}
                                 </p>
                             </div>
                             <div class="flex flex-col items-end gap-1">
@@ -177,8 +196,10 @@ const typeLabel: Record<string, string> = {
                 </div>
 
                 <!-- Observaciones (opcional) -->
-                <div v-if="selected.length > 0" class="grid gap-1.5 max-w-lg">
-                    <label class="text-sm font-medium">Observaciones (opcional)</label>
+                <div v-if="selected.length > 0" class="grid max-w-lg gap-1.5">
+                    <label class="text-sm font-medium"
+                        >Observaciones (opcional)</label
+                    >
                     <textarea
                         v-model="form.observations"
                         rows="2"

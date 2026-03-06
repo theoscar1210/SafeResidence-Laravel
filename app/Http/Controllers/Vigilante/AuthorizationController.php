@@ -15,13 +15,13 @@ class AuthorizationController extends Controller
             ->active()
             ->orderBy('end_date')
             ->get()
-            ->map(fn($a) => [
-                'id'         => $a->id,
-                'full_name'  => $a->full_name,
-                'cedula'     => $a->cedula,
-                'type'       => $a->type,
-                'end_date'   => $a->end_date?->format('d/m/Y H:i'),
-                'owner'      => $a->owner->full_name,
+            ->map(fn ($a) => [
+                'id' => $a->id,
+                'full_name' => $a->full_name,
+                'cedula' => $a->cedula,
+                'type' => $a->type,
+                'end_date' => $a->end_date?->format('d/m/Y H:i'),
+                'owner' => $a->owner->full_name,
                 'observations' => $a->observations,
             ]);
 

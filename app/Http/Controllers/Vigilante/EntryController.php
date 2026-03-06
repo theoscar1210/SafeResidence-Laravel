@@ -20,24 +20,24 @@ class EntryController extends Controller
             ->orderByDesc('entry_at')
             ->get()
             ->map(fn ($e) => [
-                'id'            => $e->id,
-                'full_name'     => $e->full_name,
-                'cedula'        => $e->cedula,
-                'apartment'     => $e->apartment,
-                'type'          => $e->type,
-                'vehicle'       => $e->vehicle,
-                'plate'         => $e->plate,
-                'entry_at'      => $e->entry_at->format('H:i'),
-                'is_inside'     => is_null($e->exit),
+                'id' => $e->id,
+                'full_name' => $e->full_name,
+                'cedula' => $e->cedula,
+                'apartment' => $e->apartment,
+                'type' => $e->type,
+                'vehicle' => $e->vehicle,
+                'plate' => $e->plate,
+                'entry_at' => $e->entry_at->format('H:i'),
+                'is_inside' => is_null($e->exit),
                 'registered_by' => $e->registered_by,
             ]);
 
         $stats = [
-            'total'       => $entries->count(),
-            'inside'      => $entries->where('is_inside', true)->count(),
+            'total' => $entries->count(),
+            'inside' => $entries->where('is_inside', true)->count(),
             'propietario' => $entries->where('type', 'propietario')->where('is_inside', true)->count(),
-            'autorizado'  => $entries->where('type', 'autorizado')->where('is_inside', true)->count(),
-            'visitante'   => $entries->where('type', 'visitante')->where('is_inside', true)->count(),
+            'autorizado' => $entries->where('type', 'autorizado')->where('is_inside', true)->count(),
+            'visitante' => $entries->where('type', 'visitante')->where('is_inside', true)->count(),
         ];
 
         return Inertia::render('vigilante/Entries/Index', compact('entries', 'stats'));
@@ -51,13 +51,13 @@ class EntryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'first_name'   => 'required|string|max:100',
-            'last_name'    => 'required|string|max:100',
-            'cedula'       => 'required|string|max:20',
-            'apartment'    => 'required|string|max:20',
-            'type'         => 'required|in:propietario,autorizado,visitante',
-            'vehicle'      => 'required|in:automovil,camioneta,moto,bicicleta,ninguno',
-            'plate'        => 'nullable|string|max:20',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'cedula' => 'required|string|max:20',
+            'apartment' => 'required|string|max:20',
+            'type' => 'required|in:propietario,autorizado,visitante',
+            'vehicle' => 'required|in:automovil,camioneta,moto,bicicleta,ninguno',
+            'plate' => 'nullable|string|max:20',
             'observations' => 'nullable|string',
         ]);
 
@@ -80,9 +80,9 @@ class EntryController extends Controller
 
         Entry::create([
             ...$data,
-            'user_id'       => $request->user()->id,
+            'user_id' => $request->user()->id,
             'registered_by' => $request->user()->username,
-            'entry_at'      => now(),
+            'entry_at' => now(),
         ]);
 
         return redirect()->route('vigilante.entries.index')
@@ -107,17 +107,17 @@ class EntryController extends Controller
             ->where('cedula', $cedula)
             ->first();
 
-        if (!$lastEntry && !$authorization) {
+        if (! $lastEntry && ! $authorization) {
             return response()->json(null);
         }
 
         return response()->json([
-            'first_name'    => $lastEntry?->first_name ?? $authorization?->first_name,
-            'last_name'     => $lastEntry?->last_name  ?? $authorization?->last_name,
-            'apartment'     => $lastEntry?->apartment,
-            'type'          => $lastEntry?->type ?? ($authorization ? 'autorizado' : null),
+            'first_name' => $lastEntry?->first_name ?? $authorization?->first_name,
+            'last_name' => $lastEntry?->last_name ?? $authorization?->last_name,
+            'apartment' => $lastEntry?->apartment,
+            'type' => $lastEntry?->type ?? ($authorization ? 'autorizado' : null),
             'authorization' => $authorization ? [
-                'type'     => $authorization->type,
+                'type' => $authorization->type,
                 'end_date' => $authorization->end_date?->format('d/m/Y H:i'),
             ] : null,
         ]);

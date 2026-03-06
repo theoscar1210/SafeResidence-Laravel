@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ref, computed } from 'vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 interface Entry {
     id: number;
@@ -59,7 +59,9 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Monitor de Ingresos</h1>
-                    <p class="text-sm text-muted-foreground">Ingresos del día de hoy</p>
+                    <p class="text-sm text-muted-foreground">
+                        Ingresos del día de hoy
+                    </p>
                 </div>
                 <Link href="/vigilante/entries/create">
                     <Button>+ Registrar Ingreso</Button>
@@ -68,19 +70,29 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
 
             <!-- Stats -->
             <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-                <div class="rounded-xl border bg-card p-4 text-center shadow-sm">
+                <div
+                    class="rounded-xl border bg-card p-4 text-center shadow-sm"
+                >
                     <p class="text-xs text-muted-foreground">Dentro ahora</p>
-                    <p class="text-3xl font-bold text-primary">{{ stats.inside }}</p>
+                    <p class="text-3xl font-bold text-primary">
+                        {{ stats.inside }}
+                    </p>
                 </div>
-                <div class="rounded-xl border bg-card p-4 text-center shadow-sm">
+                <div
+                    class="rounded-xl border bg-card p-4 text-center shadow-sm"
+                >
                     <p class="text-xs text-muted-foreground">Propietarios</p>
                     <p class="text-3xl font-bold">{{ stats.propietario }}</p>
                 </div>
-                <div class="rounded-xl border bg-card p-4 text-center shadow-sm">
+                <div
+                    class="rounded-xl border bg-card p-4 text-center shadow-sm"
+                >
                     <p class="text-xs text-muted-foreground">Autorizados</p>
                     <p class="text-3xl font-bold">{{ stats.autorizado }}</p>
                 </div>
-                <div class="rounded-xl border bg-card p-4 text-center shadow-sm">
+                <div
+                    class="rounded-xl border bg-card p-4 text-center shadow-sm"
+                >
                     <p class="text-xs text-muted-foreground">Visitantes</p>
                     <p class="text-3xl font-bold">{{ stats.visitante }}</p>
                 </div>
@@ -95,16 +107,28 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
             />
 
             <!-- Tabla -->
-            <div class="rounded-xl border bg-card shadow-sm overflow-x-auto">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <table class="w-full text-sm">
                     <thead class="border-b bg-muted/50">
                         <tr>
-                            <th class="px-4 py-3 text-left font-medium">Nombre</th>
-                            <th class="px-4 py-3 text-left font-medium">Cédula</th>
-                            <th class="px-4 py-3 text-left font-medium">Apto</th>
-                            <th class="px-4 py-3 text-left font-medium">Tipo</th>
-                            <th class="px-4 py-3 text-left font-medium">Hora</th>
-                            <th class="px-4 py-3 text-left font-medium">Estado</th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Nombre
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Cédula
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Apto
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Tipo
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Hora
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Estado
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -113,8 +137,12 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
                             :key="entry.id"
                             class="border-b last:border-0 hover:bg-muted/30"
                         >
-                            <td class="px-4 py-3 font-medium">{{ entry.full_name }}</td>
-                            <td class="px-4 py-3 text-muted-foreground">{{ entry.cedula }}</td>
+                            <td class="px-4 py-3 font-medium">
+                                {{ entry.full_name }}
+                            </td>
+                            <td class="px-4 py-3 text-muted-foreground">
+                                {{ entry.cedula }}
+                            </td>
                             <td class="px-4 py-3">{{ entry.apartment }}</td>
                             <td class="px-4 py-3">
                                 <Badge :variant="typeVariant[entry.type]">
@@ -123,15 +151,25 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
                             </td>
                             <td class="px-4 py-3">{{ entry.entry_at }}</td>
                             <td class="px-4 py-3">
-                                <span v-if="entry.is_inside" class="inline-flex items-center gap-1 text-green-600 font-medium">
-                                    <span class="h-2 w-2 rounded-full bg-green-500 inline-block"></span>
+                                <span
+                                    v-if="entry.is_inside"
+                                    class="inline-flex items-center gap-1 font-medium text-green-600"
+                                >
+                                    <span
+                                        class="inline-block h-2 w-2 rounded-full bg-green-500"
+                                    ></span>
                                     Dentro
                                 </span>
-                                <span v-else class="text-muted-foreground">Salió</span>
+                                <span v-else class="text-muted-foreground"
+                                    >Salió</span
+                                >
                             </td>
                         </tr>
                         <tr v-if="filtered.length === 0">
-                            <td colspan="6" class="px-4 py-8 text-center text-muted-foreground">
+                            <td
+                                colspan="6"
+                                class="px-4 py-8 text-center text-muted-foreground"
+                            >
                                 No hay ingresos registrados hoy.
                             </td>
                         </tr>

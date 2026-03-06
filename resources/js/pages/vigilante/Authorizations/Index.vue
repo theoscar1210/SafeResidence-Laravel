@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ref, computed } from 'vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 interface Authorization {
     id: number;
@@ -28,12 +28,12 @@ const filtered = computed(() =>
 );
 
 const typeVariant: Record<string, 'default' | 'secondary'> = {
-    visitante:  'secondary',
+    visitante: 'secondary',
     autorizado: 'default',
 };
 
 const typeLabel: Record<string, string> = {
-    visitante:  'Visitante',
+    visitante: 'Visitante',
     autorizado: 'Autorizado',
 };
 </script>
@@ -77,19 +77,29 @@ const typeLabel: Record<string, string> = {
                 >
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold">{{ auth.full_name }}</span>
+                            <span class="font-semibold">{{
+                                auth.full_name
+                            }}</span>
                             <Badge :variant="typeVariant[auth.type]">
                                 {{ typeLabel[auth.type] }}
                             </Badge>
                         </div>
-                        <p class="text-sm text-muted-foreground">CC {{ auth.cedula }}</p>
+                        <p class="text-sm text-muted-foreground">
+                            CC {{ auth.cedula }}
+                        </p>
                         <p class="text-sm text-muted-foreground">
                             Propietario: {{ auth.owner }}
                         </p>
-                        <p v-if="auth.end_date" class="text-sm text-muted-foreground">
+                        <p
+                            v-if="auth.end_date"
+                            class="text-sm text-muted-foreground"
+                        >
                             Válida hasta: {{ auth.end_date }}
                         </p>
-                        <p v-if="auth.observations" class="text-sm italic text-muted-foreground">
+                        <p
+                            v-if="auth.observations"
+                            class="text-sm text-muted-foreground italic"
+                        >
                             "{{ auth.observations }}"
                         </p>
                     </div>
@@ -99,7 +109,9 @@ const typeLabel: Record<string, string> = {
                         :href="`/vigilante/entries/create?cedula=${auth.cedula}`"
                         class="ml-4 shrink-0"
                     >
-                        <Button size="sm" variant="outline">Registrar ingreso</Button>
+                        <Button size="sm" variant="outline"
+                            >Registrar ingreso</Button
+                        >
                     </Link>
                 </div>
             </div>

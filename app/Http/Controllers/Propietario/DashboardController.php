@@ -18,8 +18,8 @@ class DashboardController extends Controller
 
         $stats = [
             'authorizations_active' => Authorization::where('user_id', $user->id)->active()->count(),
-            'authorizations_total'  => Authorization::where('user_id', $user->id)->count(),
-            'inside_now'            => $apartment
+            'authorizations_total' => Authorization::where('user_id', $user->id)->count(),
+            'inside_now' => $apartment
                 ? Entry::active()->where('apartment', $apartment)->count()
                 : 0,
         ];
@@ -28,14 +28,14 @@ class DashboardController extends Controller
             ->orderByDesc('created_at')
             ->limit(10)
             ->get()
-            ->map(fn($a) => [
-                'id'         => $a->id,
-                'full_name'  => $a->full_name,
-                'cedula'     => $a->cedula,
-                'type'       => $a->type,
-                'status'     => $a->status,
+            ->map(fn ($a) => [
+                'id' => $a->id,
+                'full_name' => $a->full_name,
+                'cedula' => $a->cedula,
+                'type' => $a->type,
+                'status' => $a->status,
                 'start_date' => $a->start_date?->format('d/m/Y'),
-                'end_date'   => $a->end_date?->format('d/m/Y'),
+                'end_date' => $a->end_date?->format('d/m/Y'),
             ]);
 
         return Inertia::render('propietario/Dashboard', compact('stats', 'authorizations'));

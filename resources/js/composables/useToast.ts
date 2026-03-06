@@ -12,7 +12,11 @@ const toasts = reactive<Toast[]>([]);
 let nextId = 0;
 
 export function useToast() {
-    function show(message: string, variant: ToastVariant = 'info', duration = 3500) {
+    function show(
+        message: string,
+        variant: ToastVariant = 'info',
+        duration = 3500,
+    ) {
         const id = ++nextId;
         toasts.push({ id, message, variant });
         setTimeout(() => dismiss(id), duration);

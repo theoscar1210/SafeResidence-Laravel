@@ -23,7 +23,7 @@ class Authorization extends Model
     {
         return [
             'start_date' => 'date',
-            'end_date'   => 'datetime',
+            'end_date' => 'datetime',
         ];
     }
 
@@ -40,9 +40,9 @@ class Authorization extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 'activo')
-                     ->where('start_date', '<=', now())
-                     ->where(function ($q) {
-                         $q->whereNull('end_date')->orWhere('end_date', '>=', now());
-                     });
+            ->where('start_date', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('end_date')->orWhere('end_date', '>=', now());
+            });
     }
 }

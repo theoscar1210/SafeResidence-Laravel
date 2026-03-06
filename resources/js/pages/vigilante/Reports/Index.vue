@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const loading = ref(false);
 
 const filters = ref({
-    format:    'pdf',
+    format: 'pdf',
     date_from: '',
-    date_to:   '',
-    type:      '',
-    cedula:    '',
-    only:      '',
+    date_to: '',
+    type: '',
+    cedula: '',
+    only: '',
 });
 
 async function exportReport() {
@@ -31,7 +31,9 @@ async function exportReport() {
     form.action = '/vigilante/reports/export';
 
     // CSRF token
-    const csrf = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+    const csrf = document.querySelector(
+        'meta[name="csrf-token"]',
+    ) as HTMLMetaElement;
     const csrfInput = document.createElement('input');
     csrfInput.type = 'hidden';
     csrfInput.name = '_token';
@@ -42,8 +44,8 @@ async function exportReport() {
     Object.entries(filters.value).forEach(([k, v]) => {
         if (v) {
             const input = document.createElement('input');
-            input.type  = 'hidden';
-            input.name  = k;
+            input.type = 'hidden';
+            input.name = k;
             input.value = v;
             form.appendChild(input);
         }
@@ -53,7 +55,9 @@ async function exportReport() {
     form.submit();
     document.body.removeChild(form);
 
-    setTimeout(() => { loading.value = false; }, 2000);
+    setTimeout(() => {
+        loading.value = false;
+    }, 2000);
 }
 </script>
 
@@ -70,13 +74,15 @@ async function exportReport() {
             </div>
 
             <div class="space-y-5 rounded-xl border bg-card p-6 shadow-sm">
-
                 <!-- Formato -->
                 <div class="grid gap-2">
                     <Label>Formato de exportación *</Label>
                     <div class="flex gap-3">
                         <label
-                            v-for="opt in [{ value: 'pdf', label: '📄 PDF' }, { value: 'excel', label: '📊 Excel (.xlsx)' }]"
+                            v-for="opt in [
+                                { value: 'pdf', label: '📄 PDF' },
+                                { value: 'excel', label: '📊 Excel (.xlsx)' },
+                            ]"
                             :key="opt.value"
                             :class="[
                                 'flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition-colors',
@@ -85,7 +91,12 @@ async function exportReport() {
                                     : 'hover:bg-muted/50',
                             ]"
                         >
-                            <input type="radio" v-model="filters.format" :value="opt.value" class="hidden" />
+                            <input
+                                type="radio"
+                                v-model="filters.format"
+                                :value="opt.value"
+                                class="hidden"
+                            />
                             {{ opt.label }}
                         </label>
                     </div>
@@ -95,11 +106,19 @@ async function exportReport() {
                 <div class="grid grid-cols-2 gap-4">
                     <div class="grid gap-1.5">
                         <Label for="date_from">Fecha desde</Label>
-                        <Input id="date_from" type="date" v-model="filters.date_from" />
+                        <Input
+                            id="date_from"
+                            type="date"
+                            v-model="filters.date_from"
+                        />
                     </div>
                     <div class="grid gap-1.5">
                         <Label for="date_to">Fecha hasta</Label>
-                        <Input id="date_to" type="date" v-model="filters.date_to" />
+                        <Input
+                            id="date_to"
+                            type="date"
+                            v-model="filters.date_to"
+                        />
                     </div>
                 </div>
 
@@ -137,15 +156,27 @@ async function exportReport() {
                         class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
                     >
                         <option value="">Todos (ingresos y salidas)</option>
-                        <option value="entries">Solo personas dentro (sin salida)</option>
-                        <option value="exits">Solo con salida registrada</option>
+                        <option value="entries">
+                            Solo personas dentro (sin salida)
+                        </option>
+                        <option value="exits">
+                            Solo con salida registrada
+                        </option>
                     </select>
                 </div>
 
-                <Button @click="exportReport" class="w-full" :disabled="loading">
+                <Button
+                    @click="exportReport"
+                    class="w-full"
+                    :disabled="loading"
+                >
                     <span v-if="loading">Generando reporte...</span>
                     <span v-else>
-                        {{ filters.format === 'pdf' ? '📄 Descargar PDF' : '📊 Descargar Excel' }}
+                        {{
+                            filters.format === 'pdf'
+                                ? '📄 Descargar PDF'
+                                : '📊 Descargar Excel'
+                        }}
                     </span>
                 </Button>
             </div>

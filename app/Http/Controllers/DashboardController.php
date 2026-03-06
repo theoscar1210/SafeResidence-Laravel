@@ -13,10 +13,10 @@ class DashboardController extends Controller
 
         return match (true) {
             $user->hasRole('Administrador') => redirect()->route('admin.dashboard'),
-            $user->hasRole('Vigilante')     => redirect()->route('vigilante.dashboard'),
-            $user->hasRole('Propietario')   => redirect()->route('propietario.dashboard'),
-            $user->hasRole('Residente')     => redirect()->route('residente.dashboard'),
-            default                         => redirect()->route('home'),
+            $user->hasRole('Vigilante') => redirect()->route('vigilante.dashboard'),
+            $user->hasRole('Propietario') => redirect()->route('propietario.dashboard'),
+            $user->hasRole('Residente') => redirect()->route('residente.dashboard'),
+            default => redirect()->route('home'),
         };
     }
 }

@@ -12,26 +12,26 @@ class HistoryController extends Controller
 {
     public function index(Request $request): Response
     {
-        $user      = $request->user();
+        $user = $request->user();
         $apartment = $user->apartment?->number;
 
         $entries = Entry::with('exit')
             ->when($apartment, fn ($q) => $q->where('apartment', $apartment))
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->type))
             ->when($request->filled('date_from'), fn ($q) => $q->whereDate('entry_at', '>=', $request->date_from))
-            ->when($request->filled('date_to'),   fn ($q) => $q->whereDate('entry_at', '<=', $request->date_to))
+            ->when($request->filled('date_to'), fn ($q) => $q->whereDate('entry_at', '<=', $request->date_to))
             ->orderByDesc('entry_at')
             ->paginate(20)
             ->withQueryString()
             ->through(fn ($e) => [
-                'id'        => $e->id,
+                'id' => $e->id,
                 'full_name' => $e->full_name,
-                'cedula'    => $e->cedula,
-                'type'      => $e->type,
-                'vehicle'   => $e->vehicle,
-                'plate'     => $e->plate,
-                'entry_at'  => $e->entry_at->format('d/m/Y H:i'),
-                'exit_at'   => $e->exit?->exited_at?->format('d/m/Y H:i'),
+                'cedula' => $e->cedula,
+                'type' => $e->type,
+                'vehicle' => $e->vehicle,
+                'plate' => $e->plate,
+                'entry_at' => $e->entry_at->format('d/m/Y H:i'),
+                'exit_at' => $e->exit?->exited_at?->format('d/m/Y H:i'),
                 'is_inside' => is_null($e->exit),
             ]);
 

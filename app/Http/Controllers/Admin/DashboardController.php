@@ -15,15 +15,15 @@ class DashboardController extends Controller
     public function index(): Response
     {
         $stats = [
-            'users'          => User::count(),
-            'apartments'     => Apartment::count(),
-            'entries_today'  => Entry::today()->count(),
-            'inside'         => Entry::active()->count(),
+            'users' => User::count(),
+            'apartments' => Apartment::count(),
+            'entries_today' => Entry::today()->count(),
+            'inside' => Entry::active()->count(),
             'authorizations' => Authorization::active()->count(),
-            'by_type'        => [
+            'by_type' => [
                 'propietario' => Entry::active()->where('type', 'propietario')->count(),
-                'autorizado'  => Entry::active()->where('type', 'autorizado')->count(),
-                'visitante'   => Entry::active()->where('type', 'visitante')->count(),
+                'autorizado' => Entry::active()->where('type', 'autorizado')->count(),
+                'visitante' => Entry::active()->where('type', 'visitante')->count(),
             ],
         ];
 
@@ -32,12 +32,12 @@ class DashboardController extends Controller
             ->orderByDesc('entry_at')
             ->limit(8)
             ->get()
-            ->map(fn($e) => [
-                'id'        => $e->id,
+            ->map(fn ($e) => [
+                'id' => $e->id,
                 'full_name' => $e->full_name,
                 'apartment' => $e->apartment,
-                'type'      => $e->type,
-                'entry_at'  => $e->entry_at->format('H:i'),
+                'type' => $e->type,
+                'entry_at' => $e->entry_at->format('H:i'),
                 'is_inside' => is_null($e->exit),
             ]);
 

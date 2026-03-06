@@ -12,10 +12,10 @@ class LoginResponse implements LoginResponseContract
 
         $redirect = match (true) {
             $user->hasRole('Administrador') => route('admin.dashboard'),
-            $user->hasRole('Vigilante')     => route('vigilante.dashboard'),
-            $user->hasRole('Propietario')   => route('propietario.dashboard'),
-            $user->hasRole('Residente')     => route('residente.dashboard'),
-            default                         => route('dashboard'),
+            $user->hasRole('Vigilante') => route('vigilante.dashboard'),
+            $user->hasRole('Propietario') => route('propietario.dashboard'),
+            $user->hasRole('Residente') => route('residente.dashboard'),
+            default => route('dashboard'),
         };
 
         return redirect()->intended($redirect);

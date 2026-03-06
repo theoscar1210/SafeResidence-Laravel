@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class EntriesExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize, WithTitle
+class EntriesExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     public function __construct(private Collection $entries) {}
 
@@ -72,8 +72,8 @@ class EntriesExport implements FromCollection, WithHeadings, WithMapping, WithSt
     {
         return [
             1 => [
-                'font'      => ['bold' => true, 'color' => ['argb' => 'FFFFFFFF']],
-                'fill'      => ['fillType' => 'solid', 'startColor' => ['argb' => 'FF1E3A56']],
+                'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFFFF']],
+                'fill' => ['fillType' => 'solid', 'startColor' => ['argb' => 'FF1E3A56']],
                 'alignment' => ['horizontal' => 'center'],
             ],
         ];

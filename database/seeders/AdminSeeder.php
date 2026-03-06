@@ -14,11 +14,11 @@ class AdminSeeder extends Seeder
             ['username' => 'admin'],
             [
                 'first_name' => 'Administrador',
-                'last_name'  => 'SafeResidence',
-                'cedula'     => '0000000000',
-                'phone'      => '3000000000',
-                'email'      => 'admin@saferesidence.com',
-                'password'   => Hash::make('Admin@12345'),
+                'last_name' => 'SafeResidence',
+                'cedula' => '0000000000',
+                'phone' => '3000000000',
+                'email' => 'admin@saferesidence.com',
+                'password' => Hash::make('Admin@12345'),
             ]
         );
 

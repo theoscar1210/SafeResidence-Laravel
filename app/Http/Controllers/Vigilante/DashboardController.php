@@ -14,9 +14,9 @@ class DashboardController extends Controller
     public function index(): Response
     {
         $stats = [
-            'inside'         => Entry::active()->count(),
-            'entries_today'  => Entry::today()->count(),
-            'exits_today'    => ExitRecord::whereDate('exited_at', today())->count(),
+            'inside' => Entry::active()->count(),
+            'entries_today' => Entry::today()->count(),
+            'exits_today' => ExitRecord::whereDate('exited_at', today())->count(),
             'authorizations' => Authorization::active()->count(),
         ];
 
@@ -24,12 +24,12 @@ class DashboardController extends Controller
             ->orderByDesc('entry_at')
             ->limit(10)
             ->get()
-            ->map(fn($e) => [
-                'id'        => $e->id,
+            ->map(fn ($e) => [
+                'id' => $e->id,
                 'full_name' => $e->full_name,
                 'apartment' => $e->apartment,
-                'type'      => $e->type,
-                'entry_at'  => $e->entry_at->format('H:i'),
+                'type' => $e->type,
+                'entry_at' => $e->entry_at->format('H:i'),
             ]);
 
         return Inertia::render('vigilante/Dashboard', compact('stats', 'inside'));

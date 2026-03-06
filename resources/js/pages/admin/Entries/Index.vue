@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { ChevronLeft, ChevronRight, Search, X } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, ChevronRight, Search, X } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 interface Entry {
     id: number;
@@ -43,21 +43,21 @@ const props = defineProps<{ entries: PaginatedEntries; filters: Filters }>();
 
 const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
     propietario: 'default',
-    autorizado:  'secondary',
-    visitante:   'outline',
+    autorizado: 'secondary',
+    visitante: 'outline',
 };
 
 const typeLabel: Record<string, string> = {
     propietario: 'Propietario',
-    autorizado:  'Autorizado',
-    visitante:   'Visitante',
+    autorizado: 'Autorizado',
+    visitante: 'Visitante',
 };
 
 const vehicleLabel: Record<string, string> = {
-    ninguno:   '—',
+    ninguno: '—',
     automovil: 'Auto',
     camioneta: 'Camioneta',
-    moto:      'Moto',
+    moto: 'Moto',
     bicicleta: 'Bici',
 };
 
@@ -91,9 +91,10 @@ const hasFilters = () =>
         <Head title="Historial de Accesos" />
 
         <div class="flex flex-col gap-6 p-6">
-
             <!-- Header -->
-            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div>
                     <h1 class="text-2xl font-bold">Historial de Accesos</h1>
                     <p class="text-sm text-muted-foreground">
@@ -104,10 +105,14 @@ const hasFilters = () =>
 
             <!-- Filtros -->
             <div class="rounded-xl border bg-card p-4 shadow-sm">
-                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+                <div
+                    class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
+                >
                     <!-- Búsqueda -->
                     <div class="relative sm:col-span-2 xl:col-span-1">
-                        <Search class="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Search
+                            class="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground"
+                        />
                         <Input
                             v-model="localFilters.search"
                             placeholder="Nombre o cédula..."
@@ -133,9 +138,17 @@ const hasFilters = () =>
                     </select>
 
                     <!-- Fechas -->
-                    <Input v-model="localFilters.date_from" type="date" placeholder="Desde" />
+                    <Input
+                        v-model="localFilters.date_from"
+                        type="date"
+                        placeholder="Desde"
+                    />
                     <div class="flex items-center gap-2">
-                        <Input v-model="localFilters.date_to" type="date" placeholder="Hasta" />
+                        <Input
+                            v-model="localFilters.date_to"
+                            type="date"
+                            placeholder="Hasta"
+                        />
                         <Button
                             v-if="hasFilters()"
                             @click="clearFilters"
@@ -151,18 +164,34 @@ const hasFilters = () =>
             </div>
 
             <!-- Tabla -->
-            <div class="rounded-xl border bg-card shadow-sm overflow-x-auto">
+            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <table class="w-full text-sm">
                     <thead class="border-b bg-muted/50">
                         <tr>
-                            <th class="px-4 py-3 text-left font-medium">Nombre</th>
-                            <th class="px-4 py-3 text-left font-medium">Cédula</th>
-                            <th class="px-4 py-3 text-left font-medium">Apto</th>
-                            <th class="px-4 py-3 text-left font-medium">Tipo</th>
-                            <th class="px-4 py-3 text-left font-medium">Vehículo / Placa</th>
-                            <th class="px-4 py-3 text-left font-medium">Ingreso</th>
-                            <th class="px-4 py-3 text-left font-medium">Salida</th>
-                            <th class="px-4 py-3 text-left font-medium">Estado</th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Nombre
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Cédula
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Apto
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Tipo
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Vehículo / Placa
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Ingreso
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Salida
+                            </th>
+                            <th class="px-4 py-3 text-left font-medium">
+                                Estado
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -171,34 +200,66 @@ const hasFilters = () =>
                             :key="entry.id"
                             class="border-b last:border-0 hover:bg-muted/30"
                         >
-                            <td class="px-4 py-3 font-medium">{{ entry.full_name }}</td>
-                            <td class="px-4 py-3 font-mono text-xs text-muted-foreground">{{ entry.cedula }}</td>
+                            <td class="px-4 py-3 font-medium">
+                                {{ entry.full_name }}
+                            </td>
+                            <td
+                                class="px-4 py-3 font-mono text-xs text-muted-foreground"
+                            >
+                                {{ entry.cedula }}
+                            </td>
                             <td class="px-4 py-3">{{ entry.apartment }}</td>
                             <td class="px-4 py-3">
-                                <Badge :variant="typeVariant[entry.type]">{{ typeLabel[entry.type] ?? entry.type }}</Badge>
+                                <Badge :variant="typeVariant[entry.type]">{{
+                                    typeLabel[entry.type] ?? entry.type
+                                }}</Badge>
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                <span class="text-muted-foreground">{{ vehicleLabel[entry.vehicle] ?? entry.vehicle }}</span>
-                                <span v-if="entry.plate" class="ml-1 font-mono font-semibold">{{ entry.plate }}</span>
+                                <span class="text-muted-foreground">{{
+                                    vehicleLabel[entry.vehicle] ?? entry.vehicle
+                                }}</span>
+                                <span
+                                    v-if="entry.plate"
+                                    class="ml-1 font-mono font-semibold"
+                                    >{{ entry.plate }}</span
+                                >
                             </td>
-                            <td class="px-4 py-3 font-mono text-xs">{{ entry.entry_at }}</td>
-                            <td class="px-4 py-3 font-mono text-xs text-muted-foreground">
+                            <td class="px-4 py-3 font-mono text-xs">
+                                {{ entry.entry_at }}
+                            </td>
+                            <td
+                                class="px-4 py-3 font-mono text-xs text-muted-foreground"
+                            >
                                 {{ entry.exit_at ?? '—' }}
                             </td>
                             <td class="px-4 py-3">
-                                <span v-if="entry.is_inside" class="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600">
-                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                <span
+                                    v-if="entry.is_inside"
+                                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600"
+                                >
+                                    <span
+                                        class="h-2 w-2 rounded-full bg-green-500"
+                                    ></span>
                                     Dentro
                                 </span>
-                                <span v-else class="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                                    <span class="h-2 w-2 rounded-full bg-slate-300"></span>
+                                <span
+                                    v-else
+                                    class="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
+                                >
+                                    <span
+                                        class="h-2 w-2 rounded-full bg-slate-300"
+                                    ></span>
                                     Salió
                                 </span>
                             </td>
                         </tr>
                         <tr v-if="entries.data.length === 0">
-                            <td colspan="8" class="px-4 py-12 text-center text-muted-foreground">
-                                No se encontraron registros con los filtros actuales.
+                            <td
+                                colspan="8"
+                                class="px-4 py-12 text-center text-muted-foreground"
+                            >
+                                No se encontraron registros con los filtros
+                                actuales.
                             </td>
                         </tr>
                     </tbody>
@@ -206,9 +267,13 @@ const hasFilters = () =>
             </div>
 
             <!-- Paginación -->
-            <div v-if="entries.last_page > 1" class="flex items-center justify-between text-sm">
+            <div
+                v-if="entries.last_page > 1"
+                class="flex items-center justify-between text-sm"
+            >
                 <p class="text-muted-foreground">
-                    Mostrando {{ entries.from }}–{{ entries.to }} de {{ entries.total.toLocaleString() }} registros
+                    Mostrando {{ entries.from }}–{{ entries.to }} de
+                    {{ entries.total.toLocaleString() }} registros
                 </p>
                 <div class="flex items-center gap-1">
                     <template v-for="link in entries.links" :key="link.label">
@@ -219,25 +284,36 @@ const hasFilters = () =>
                             :class="[
                                 'inline-flex h-8 min-w-8 items-center justify-center rounded-md px-2 text-sm transition-colors',
                                 link.active
-                                    ? 'bg-primary text-primary-foreground font-semibold'
+                                    ? 'bg-primary font-semibold text-primary-foreground'
                                     : 'hover:bg-muted',
                             ]"
                         >
-                            <ChevronLeft v-if="link.label === '&laquo; Previous'" class="h-4 w-4" />
-                            <ChevronRight v-else-if="link.label === 'Next &raquo;'" class="h-4 w-4" />
+                            <ChevronLeft
+                                v-if="link.label === '&laquo; Previous'"
+                                class="h-4 w-4"
+                            />
+                            <ChevronRight
+                                v-else-if="link.label === 'Next &raquo;'"
+                                class="h-4 w-4"
+                            />
                             <span v-else>{{ link.label }}</span>
                         </Link>
                         <span
                             v-else
                             class="inline-flex h-8 min-w-8 items-center justify-center rounded-md px-2 text-sm text-muted-foreground opacity-50"
                         >
-                            <ChevronLeft v-if="link.label === '&laquo; Previous'" class="h-4 w-4" />
-                            <ChevronRight v-else-if="link.label === 'Next &raquo;'" class="h-4 w-4" />
+                            <ChevronLeft
+                                v-if="link.label === '&laquo; Previous'"
+                                class="h-4 w-4"
+                            />
+                            <ChevronRight
+                                v-else-if="link.label === 'Next &raquo;'"
+                                class="h-4 w-4"
+                            />
                         </span>
                     </template>
                 </div>
             </div>
-
         </div>
     </AppLayout>
 </template>

@@ -16,14 +16,14 @@ class AuthorizationController extends Controller
         $authorizations = Authorization::where('user_id', $request->user()->id)
             ->orderByDesc('created_at')
             ->get()
-            ->map(fn($a) => [
-                'id'         => $a->id,
-                'full_name'  => $a->full_name,
-                'cedula'     => $a->cedula,
-                'type'       => $a->type,
-                'status'     => $a->status,
+            ->map(fn ($a) => [
+                'id' => $a->id,
+                'full_name' => $a->full_name,
+                'cedula' => $a->cedula,
+                'type' => $a->type,
+                'status' => $a->status,
                 'start_date' => $a->start_date->format('d/m/Y'),
-                'end_date'   => $a->end_date?->format('d/m/Y H:i'),
+                'end_date' => $a->end_date?->format('d/m/Y H:i'),
                 'observations' => $a->observations,
             ]);
 
@@ -38,19 +38,19 @@ class AuthorizationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'first_name'   => 'required|string|max:100',
-            'last_name'    => 'required|string|max:100',
-            'cedula'       => 'required|string|max:20',
-            'type'         => 'required|in:visitante,autorizado',
-            'start_date'   => 'required|date|after_or_equal:today',
-            'end_date'     => 'nullable|date|after:start_date',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'cedula' => 'required|string|max:20',
+            'type' => 'required|in:visitante,autorizado',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'nullable|date|after:start_date',
             'observations' => 'nullable|string',
         ]);
 
         Authorization::create([
             ...$data,
             'user_id' => $request->user()->id,
-            'status'  => 'activo',
+            'status' => 'activo',
         ]);
 
         return redirect()->route('propietario.authorizations.index')

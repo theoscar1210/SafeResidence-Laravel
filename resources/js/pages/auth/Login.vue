@@ -23,7 +23,10 @@ defineProps<{
     >
         <Head title="Iniciar sesión" />
 
-        <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
+        <div
+            v-if="status"
+            class="mb-4 text-center text-sm font-medium text-green-600"
+        >
             {{ status }}
         </div>
 
@@ -70,7 +73,12 @@ defineProps<{
                     </Label>
                 </div>
 
-                <Button type="submit" class="mt-2 w-full" :tabindex="4" :disabled="processing">
+                <Button
+                    type="submit"
+                    class="mt-2 w-full"
+                    :tabindex="4"
+                    :disabled="processing"
+                >
                     <Spinner v-if="processing" />
                     Ingresar
                 </Button>

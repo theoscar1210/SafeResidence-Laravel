@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Vigilante\EntryController;
+use App\Http\Controllers\Vigilante\ExitController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -25,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('entries/create', [EntryController::class, 'create'])->name('entries.create');
         Route::post('entries',       [EntryController::class, 'store'])->name('entries.store');
         Route::get('entries/lookup', [EntryController::class, 'lookup'])->name('entries.lookup');
+        Route::get('exits',          [ExitController::class,  'index'])->name('exits.index');
+        Route::post('exits',         [ExitController::class,  'store'])->name('exits.store');
     });
 
     // Propietario

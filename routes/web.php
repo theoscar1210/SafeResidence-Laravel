@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
+use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
 use App\Http\Controllers\Vigilante\AuthorizationController as VigilanteAuthorizationController;
+use App\Http\Controllers\Vigilante\DashboardController as VigDashboardController;
 use App\Http\Controllers\Vigilante\EntryController;
 use App\Http\Controllers\Vigilante\ExitController;
 use App\Http\Controllers\Vigilante\ReportController;
@@ -19,12 +23,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Administrador
     Route::middleware('role:Administrador')->prefix('admin')->name('admin.')->group(function () {
-        Route::inertia('dashboard', 'admin/Dashboard')->name('dashboard');
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     });
 
     // Vigilante
     Route::middleware('role:Vigilante')->prefix('vigilante')->name('vigilante.')->group(function () {
-        Route::inertia('dashboard', 'vigilante/Dashboard')->name('dashboard');
+        Route::get('dashboard', [VigDashboardController::class, 'index'])->name('dashboard');
         Route::get('entries',        [EntryController::class,                  'index'])->name('entries.index');
         Route::get('entries/create', [EntryController::class,                  'create'])->name('entries.create');
         Route::post('entries',       [EntryController::class,                  'store'])->name('entries.store');
@@ -38,7 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Propietario
     Route::middleware('role:Propietario')->prefix('propietario')->name('propietario.')->group(function () {
-        Route::inertia('dashboard', 'propietario/Dashboard')->name('dashboard');
+        Route::get('dashboard', [PropietarioDashboardController::class, 'index'])->name('dashboard');
         Route::get('authorizations',                         [PropietarioAuthorizationController::class, 'index'])->name('authorizations.index');
         Route::get('authorizations/create',                  [PropietarioAuthorizationController::class, 'create'])->name('authorizations.create');
         Route::post('authorizations',                        [PropietarioAuthorizationController::class, 'store'])->name('authorizations.store');

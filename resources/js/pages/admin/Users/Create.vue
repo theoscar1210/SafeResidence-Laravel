@@ -1,0 +1,114 @@
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+defineProps<{ roles: string[] }>();
+
+const form = useForm({
+    first_name:            '',
+    last_name:             '',
+    cedula:                '',
+    phone:                 '',
+    username:              '',
+    email:                 '',
+    password:              '',
+    password_confirmation: '',
+    role:                  '',
+});
+
+function submit() {
+    form.post('/admin/users');
+}
+</script>
+
+<template>
+    <AppLayout>
+        <Head title="Nuevo Usuario" />
+        <div class="mx-auto max-w-2xl p-6">
+            <div class="mb-6 flex items-center gap-4">
+                <Link href="/admin/users" class="text-muted-foreground hover:text-foreground">← Volver</Link>
+                <div>
+                    <h1 class="text-2xl font-bold">Nuevo Usuario</h1>
+                    <p class="text-sm text-muted-foreground">Crear una cuenta en el sistema</p>
+                </div>
+            </div>
+
+            <form @submit.prevent="submit" class="space-y-5 rounded-xl border bg-card p-6 shadow-sm">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="first_name">Nombres *</Label>
+                        <Input id="first_name" v-model="form.first_name" />
+                        <p v-if="form.errors.first_name" class="text-xs text-destructive">{{ form.errors.first_name }}</p>
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="last_name">Apellidos *</Label>
+                        <Input id="last_name" v-model="form.last_name" />
+                        <p v-if="form.errors.last_name" class="text-xs text-destructive">{{ form.errors.last_name }}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="cedula">Cédula *</Label>
+                        <Input id="cedula" v-model="form.cedula" />
+                        <p v-if="form.errors.cedula" class="text-xs text-destructive">{{ form.errors.cedula }}</p>
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="phone">Teléfono</Label>
+                        <Input id="phone" v-model="form.phone" />
+                        <p v-if="form.errors.phone" class="text-xs text-destructive">{{ form.errors.phone }}</p>
+                    </div>
+                </div>
+
+                <div class="grid gap-1.5">
+                    <Label for="username">Usuario *</Label>
+                    <Input id="username" v-model="form.username" />
+                    <p v-if="form.errors.username" class="text-xs text-destructive">{{ form.errors.username }}</p>
+                </div>
+
+                <div class="grid gap-1.5">
+                    <Label for="email">Correo electrónico *</Label>
+                    <Input id="email" type="email" v-model="form.email" />
+                    <p v-if="form.errors.email" class="text-xs text-destructive">{{ form.errors.email }}</p>
+                </div>
+
+                <div class="grid gap-1.5">
+                    <Label for="role">Rol *</Label>
+                    <select
+                        id="role"
+                        v-model="form.role"
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                    >
+                        <option value="">Seleccionar rol</option>
+                        <option v-for="r in roles" :key="r" :value="r">{{ r }}</option>
+                    </select>
+                    <p v-if="form.errors.role" class="text-xs text-destructive">{{ form.errors.role }}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="password">Contraseña *</Label>
+                        <Input id="password" type="password" v-model="form.password" />
+                        <p v-if="form.errors.password" class="text-xs text-destructive">{{ form.errors.password }}</p>
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="password_confirmation">Confirmar contraseña *</Label>
+                        <Input id="password_confirmation" type="password" v-model="form.password_confirmation" />
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
+                    <Link href="/admin/users">
+                        <Button type="button" variant="outline">Cancelar</Button>
+                    </Link>
+                    <Button type="submit" :disabled="form.processing">
+                        {{ form.processing ? 'Guardando...' : 'Crear usuario' }}
+                    </Button>
+                </div>
+            </form>
+        </div>
+    </AppLayout>
+</template>

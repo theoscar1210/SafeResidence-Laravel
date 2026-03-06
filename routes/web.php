@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
 use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
+use App\Http\Controllers\Propietario\HistoryController as PropietarioHistoryController;
 use App\Http\Controllers\Vigilante\AuthorizationController as VigilanteAuthorizationController;
 use App\Http\Controllers\Vigilante\DashboardController as VigDashboardController;
 use App\Http\Controllers\Vigilante\EntryController;
@@ -50,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('authorizations/create',                  [PropietarioAuthorizationController::class, 'create'])->name('authorizations.create');
         Route::post('authorizations',                        [PropietarioAuthorizationController::class, 'store'])->name('authorizations.store');
         Route::delete('authorizations/{authorization}',      [PropietarioAuthorizationController::class, 'destroy'])->name('authorizations.destroy');
+        Route::get('history', [PropietarioHistoryController::class, 'index'])->name('history.index');
     });
 
     // Residente

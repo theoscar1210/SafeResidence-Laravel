@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, LayoutGrid, LogIn, LogOut, Shield, Users } from 'lucide-vue-next';
+import { ClipboardList, FileText, LayoutGrid, LogIn, LogOut, Shield, Users } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -30,6 +30,7 @@ const navByRole: Record<string, NavItem[]> = {
         { title: 'Monitor de Ingresos', href: '/vigilante/entries',        icon: ClipboardList },
         { title: 'Registrar Salida',    href: '/vigilante/exits',          icon: LogOut },
         { title: 'Autorizaciones',      href: '/vigilante/authorizations', icon: Shield },
+        { title: 'Reportes',            href: '/vigilante/reports',        icon: FileText },
     ],
     Propietario: [
         { title: 'Dashboard',          href: '/propietario/dashboard',      icon: LayoutGrid },

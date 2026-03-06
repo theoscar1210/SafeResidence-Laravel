@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,28 +24,38 @@ const authorization = ref<{ type: string; end_date: string | null } | null>(null
 const lookupTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 const searching = ref(false);
 
+async function lookup(cedula: string) {
+    if (cedula.length < 3) return;
+    searching.value = true;
+    try {
+        const res = await fetch(`/vigilante/entries/lookup?cedula=${encodeURIComponent(cedula)}`);
+        const data = await res.json();
+        if (data) {
+            form.first_name = data.first_name ?? form.first_name;
+            form.last_name  = data.last_name  ?? form.last_name;
+            form.apartment  = data.apartment  ?? form.apartment;
+            form.type       = data.type       ?? form.type;
+            authorization.value = data.authorization ?? null;
+        }
+    } finally {
+        searching.value = false;
+    }
+}
+
 watch(() => form.cedula, (val) => {
     if (lookupTimeout.value) clearTimeout(lookupTimeout.value);
     authorization.value = null;
+    lookupTimeout.value = setTimeout(() => lookup(val), 500);
+});
 
-    if (val.length < 3) return;
-
-    lookupTimeout.value = setTimeout(async () => {
-        searching.value = true;
-        try {
-            const res = await fetch(`/vigilante/entries/lookup?cedula=${encodeURIComponent(val)}`);
-            const data = await res.json();
-            if (data) {
-                form.first_name = data.first_name ?? form.first_name;
-                form.last_name  = data.last_name  ?? form.last_name;
-                form.apartment  = data.apartment  ?? form.apartment;
-                form.type       = data.type       ?? form.type;
-                authorization.value = data.authorization ?? null;
-            }
-        } finally {
-            searching.value = false;
-        }
-    }, 500);
+// Pre-cargar cédula si viene desde la vista de autorizaciones
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    const cedula = params.get('cedula');
+    if (cedula) {
+        form.cedula = cedula;
+        lookup(cedula);
+    }
 });
 
 function submit() {

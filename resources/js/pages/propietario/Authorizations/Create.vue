@@ -1,0 +1,117 @@
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import InputError from '@/components/InputError.vue';
+
+const form = useForm({
+    first_name:   '',
+    last_name:    '',
+    cedula:       '',
+    type:         'visitante',
+    start_date:   new Date().toISOString().split('T')[0],
+    end_date:     '',
+    observations: '',
+});
+
+function submit() {
+    form.post('/propietario/authorizations');
+}
+</script>
+
+<template>
+    <AppLayout>
+        <Head title="Nueva Autorización" />
+
+        <div class="mx-auto max-w-2xl p-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold">Nueva Autorización</h1>
+                <p class="text-sm text-muted-foreground">
+                    Autoriza el ingreso de una persona a tu apartamento
+                </p>
+            </div>
+
+            <form @submit.prevent="submit" class="space-y-5 rounded-xl border bg-card p-6 shadow-sm">
+
+                <!-- Nombres y apellidos -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="first_name">Nombres *</Label>
+                        <Input id="first_name" v-model="form.first_name" placeholder="Nombres" />
+                        <InputError :message="form.errors.first_name" />
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="last_name">Apellidos *</Label>
+                        <Input id="last_name" v-model="form.last_name" placeholder="Apellidos" />
+                        <InputError :message="form.errors.last_name" />
+                    </div>
+                </div>
+
+                <!-- Cédula y tipo -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="cedula">Cédula *</Label>
+                        <Input id="cedula" v-model="form.cedula" placeholder="Número de cédula" />
+                        <InputError :message="form.errors.cedula" />
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="type">Tipo *</Label>
+                        <select
+                            id="type"
+                            v-model="form.type"
+                            class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                        >
+                            <option value="visitante">Visitante</option>
+                            <option value="autorizado">Autorizado permanente</option>
+                        </select>
+                        <InputError :message="form.errors.type" />
+                    </div>
+                </div>
+
+                <!-- Fechas -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-1.5">
+                        <Label for="start_date">Fecha de inicio *</Label>
+                        <Input id="start_date" type="date" v-model="form.start_date" />
+                        <InputError :message="form.errors.start_date" />
+                    </div>
+                    <div class="grid gap-1.5">
+                        <Label for="end_date">
+                            Fecha de vencimiento
+                            <span class="text-muted-foreground">(opcional)</span>
+                        </Label>
+                        <Input id="end_date" type="datetime-local" v-model="form.end_date" />
+                        <InputError :message="form.errors.end_date" />
+                        <p class="text-xs text-muted-foreground">
+                            Vacío = sin vencimiento
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="grid gap-1.5">
+                    <Label for="observations">Observaciones</Label>
+                    <textarea
+                        id="observations"
+                        v-model="form.observations"
+                        rows="2"
+                        placeholder="Ej: Personal de mantenimiento, familiar, etc."
+                        class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground"
+                    />
+                    <InputError :message="form.errors.observations" />
+                </div>
+
+                <div class="flex gap-3">
+                    <Button type="submit" :disabled="form.processing">
+                        Crear Autorización
+                    </Button>
+                    <a href="/propietario/authorizations" class="inline-flex h-9 items-center rounded-md border px-4 text-sm hover:bg-muted">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </AppLayout>
+</template>

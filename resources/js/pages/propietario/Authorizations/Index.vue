@@ -1,0 +1,110 @@
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+
+interface Authorization {
+    id: number;
+    full_name: string;
+    cedula: string;
+    type: string;
+    status: string;
+    start_date: string;
+    end_date: string | null;
+    observations: string | null;
+}
+
+defineProps<{ authorizations: Authorization[] }>();
+
+const { props: pageProps } = usePage<{ flash?: { success?: string } }>();
+
+function destroy(id: number) {
+    if (confirm('¿Eliminar esta autorización?')) {
+        router.delete(`/propietario/authorizations/${id}`);
+    }
+}
+
+const statusVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
+    activo: 'default',
+    usado:  'secondary',
+    vencido: 'outline',
+};
+
+const typeLabel: Record<string, string> = {
+    visitante:  'Visitante',
+    autorizado: 'Autorizado',
+};
+</script>
+
+<template>
+    <AppLayout>
+        <Head title="Mis Autorizaciones" />
+
+        <div class="flex flex-col gap-6 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold">Mis Autorizaciones</h1>
+                    <p class="text-sm text-muted-foreground">
+                        Gestiona las autorizaciones de ingreso para tus visitantes
+                    </p>
+                </div>
+                <Link href="/propietario/authorizations/create">
+                    <Button>+ Nueva Autorización</Button>
+                </Link>
+            </div>
+
+            <!-- Flash -->
+            <div
+                v-if="pageProps.flash?.success"
+                class="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800"
+            >
+                {{ pageProps.flash.success }}
+            </div>
+
+            <!-- Vacío -->
+            <div
+                v-if="authorizations.length === 0"
+                class="rounded-xl border bg-card p-12 text-center text-muted-foreground shadow-sm"
+            >
+                No tienes autorizaciones creadas.
+                <Link href="/propietario/authorizations/create" class="ml-1 text-primary underline">
+                    Crear una
+                </Link>
+            </div>
+
+            <!-- Lista -->
+            <div v-else class="grid gap-3">
+                <div
+                    v-for="auth in authorizations"
+                    :key="auth.id"
+                    class="flex items-start justify-between rounded-xl border bg-card p-5 shadow-sm"
+                >
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold">{{ auth.full_name }}</span>
+                            <Badge :variant="statusVariant[auth.status]">{{ auth.status }}</Badge>
+                            <Badge variant="outline">{{ typeLabel[auth.type] }}</Badge>
+                        </div>
+                        <p class="text-sm text-muted-foreground">CC {{ auth.cedula }}</p>
+                        <p class="text-sm text-muted-foreground">
+                            Desde {{ auth.start_date }}
+                            <span v-if="auth.end_date"> hasta {{ auth.end_date }}</span>
+                            <span v-else> · Sin fecha de vencimiento</span>
+                        </p>
+                        <p v-if="auth.observations" class="text-sm text-muted-foreground italic">
+                            "{{ auth.observations }}"
+                        </p>
+                    </div>
+                    <button
+                        v-if="auth.status === 'activo'"
+                        @click="destroy(auth.id)"
+                        class="ml-4 shrink-0 rounded-md px-3 py-1.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                    >
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </AppLayout>
+</template>

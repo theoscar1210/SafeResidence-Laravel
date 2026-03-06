@@ -26,6 +26,7 @@ class EntryController extends Controller
                 'apartment'     => $e->apartment,
                 'type'          => $e->type,
                 'vehicle'       => $e->vehicle,
+                'plate'         => $e->plate,
                 'entry_at'      => $e->entry_at->format('H:i'),
                 'is_inside'     => is_null($e->exit),
                 'registered_by' => $e->registered_by,
@@ -56,6 +57,7 @@ class EntryController extends Controller
             'apartment'    => 'required|string|max:20',
             'type'         => 'required|in:propietario,autorizado,visitante',
             'vehicle'      => 'required|in:automovil,camioneta,moto,bicicleta,ninguno',
+            'plate'        => 'nullable|string|max:20',
             'observations' => 'nullable|string',
         ]);
 

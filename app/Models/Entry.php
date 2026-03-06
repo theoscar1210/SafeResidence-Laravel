@@ -16,6 +16,7 @@ class Entry extends Model
         'apartment',
         'type',
         'vehicle',
+        'plate',
         'registered_by',
         'observations',
         'entry_at',

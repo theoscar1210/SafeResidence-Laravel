@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vigilante;
 use App\Http\Controllers\Controller;
 use App\Models\Authorization;
 use App\Models\Entry;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class EntryController extends Controller
         $stats = [
             'total' => $entries->count(),
             'inside' => $entries->where('is_inside', true)->count(),
-            'propietario' => $entries->where('type', 'propietario')->where('is_inside', true)->count(),
+            'propietario' => $entries->whereIn('type', ['propietario', 'residente'])->where('is_inside', true)->count(),
             'autorizado' => $entries->where('type', 'autorizado')->where('is_inside', true)->count(),
             'visitante' => $entries->where('type', 'visitante')->where('is_inside', true)->count(),
         ];
@@ -55,7 +56,7 @@ class EntryController extends Controller
             'last_name' => 'required|string|max:100',
             'cedula' => 'required|string|max:20',
             'apartment' => 'required|string|max:20',
-            'type' => 'required|in:propietario,autorizado,visitante',
+            'type' => 'required|in:propietario,residente,autorizado,visitante',
             'vehicle' => 'required|in:automovil,camioneta,moto,bicicleta,ninguno',
             'plate' => 'nullable|string|max:20',
             'observations' => 'nullable|string',
@@ -89,33 +90,106 @@ class EntryController extends Controller
             ->with('success', 'Ingreso registrado correctamente.');
     }
 
+    /**
+     * Lookup by cedula: prioritizes registered users (Propietario/Residente),
+     * then active authorizations, then past entry history.
+     */
     public function lookup(Request $request): JsonResponse
     {
-        $cedula = $request->query('cedula', '');
+        $cedula = trim($request->query('cedula', ''));
 
         if (strlen($cedula) < 3) {
             return response()->json(null);
         }
 
-        // Buscar datos de ingreso anterior
-        $lastEntry = Entry::where('cedula', $cedula)
-            ->latest('entry_at')
-            ->first();
+        $user = User::where('cedula', $cedula)->first();
+        $authorization = Authorization::active()->where('cedula', $cedula)->first();
+        $lastEntry = Entry::where('cedula', $cedula)->latest('entry_at')->first();
 
-        // Buscar autorización activa
-        $authorization = Authorization::active()
-            ->where('cedula', $cedula)
-            ->first();
-
-        if (! $lastEntry && ! $authorization) {
+        if (! $user && ! $authorization && ! $lastEntry) {
             return response()->json(null);
         }
 
+        $type = null;
+        $apartment = null;
+        $knownInSystem = false;
+
+        if ($user) {
+            $knownInSystem = true;
+            $roleName = $user->getRoleNames()->first();
+            $type = match ($roleName) {
+                'Propietario' => 'propietario',
+                'Residente' => 'residente',
+                default => null,
+            };
+            $apartment = $user->apartment_number;
+        }
+
+        if (! $apartment) {
+            $apartment = $lastEntry?->apartment;
+        }
+
+        if (! $type) {
+            $type = $authorization ? 'autorizado' : ($lastEntry?->type ?? null);
+        }
+
         return response()->json([
-            'first_name' => $lastEntry?->first_name ?? $authorization?->first_name,
-            'last_name' => $lastEntry?->last_name ?? $authorization?->last_name,
-            'apartment' => $lastEntry?->apartment,
-            'type' => $lastEntry?->type ?? ($authorization ? 'autorizado' : null),
+            'first_name' => $user?->first_name ?? $lastEntry?->first_name ?? $authorization?->first_name,
+            'last_name' => $user?->last_name ?? $lastEntry?->last_name ?? $authorization?->last_name,
+            'apartment' => $apartment,
+            'type' => $type ?? 'visitante',
+            'known_in_system' => $knownInSystem,
+            'authorization' => $authorization ? [
+                'type' => $authorization->type,
+                'end_date' => $authorization->end_date?->format('d/m/Y H:i'),
+            ] : null,
+        ]);
+    }
+
+    /**
+     * Lookup by license plate: fills person data from most recent entry with that plate.
+     */
+    public function lookupByPlate(Request $request): JsonResponse
+    {
+        $plate = strtoupper(trim($request->query('plate', '')));
+
+        if (strlen($plate) < 3) {
+            return response()->json(null);
+        }
+
+        $lastEntry = Entry::where('plate', $plate)->latest('entry_at')->first();
+
+        if (! $lastEntry) {
+            return response()->json(null);
+        }
+
+        $user = User::where('cedula', $lastEntry->cedula)->first();
+        $authorization = Authorization::active()->where('cedula', $lastEntry->cedula)->first();
+
+        $type = null;
+        $knownInSystem = false;
+
+        if ($user) {
+            $knownInSystem = true;
+            $roleName = $user->getRoleNames()->first();
+            $type = match ($roleName) {
+                'Propietario' => 'propietario',
+                'Residente' => 'residente',
+                default => null,
+            };
+        }
+
+        if (! $type) {
+            $type = $authorization ? 'autorizado' : $lastEntry->type;
+        }
+
+        return response()->json([
+            'cedula' => $lastEntry->cedula,
+            'first_name' => $user?->first_name ?? $lastEntry->first_name,
+            'last_name' => $user?->last_name ?? $lastEntry->last_name,
+            'apartment' => $user?->apartment_number ?? $lastEntry->apartment,
+            'type' => $type ?? 'visitante',
+            'known_in_system' => $knownInSystem,
             'authorization' => $authorization ? [
                 'type' => $authorization->type,
                 'end_date' => $authorization->end_date?->format('d/m/Y H:i'),

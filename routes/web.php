@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('entries/create', [EntryController::class,                  'create'])->name('entries.create');
         Route::post('entries', [EntryController::class,                  'store'])->name('entries.store');
         Route::get('entries/lookup', [EntryController::class,                  'lookup'])->name('entries.lookup');
+        Route::get('entries/lookup-plate', [EntryController::class,             'lookupByPlate'])->name('entries.lookup-plate');
         Route::get('exits', [ExitController::class,                   'index'])->name('exits.index');
         Route::post('exits', [ExitController::class,                   'store'])->name('exits.store');
         Route::get('authorizations', [VigilanteAuthorizationController::class, 'index'])->name('authorizations.index');

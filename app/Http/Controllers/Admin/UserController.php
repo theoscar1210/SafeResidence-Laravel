@@ -46,6 +46,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:50',
             'cedula' => 'required|string|max:20|unique:users',
             'phone' => 'nullable|string|max:15',
+            'apartment_number' => 'nullable|string|max:20',
             'username' => 'required|string|max:50|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
@@ -74,6 +75,7 @@ class UserController extends Controller
                 'last_name' => $user->last_name,
                 'cedula' => $user->cedula,
                 'phone' => $user->phone,
+                'apartment_number' => $user->apartment_number,
                 'username' => $user->username,
                 'email' => $user->email,
                 'role' => $user->getRoleNames()->first(),
@@ -89,21 +91,28 @@ class UserController extends Controller
             'last_name' => 'required|string|max:50',
             'cedula' => "required|string|max:20|unique:users,cedula,{$user->id}",
             'phone' => 'nullable|string|max:15',
+            'apartment_number' => 'nullable|string|max:20',
             'username' => "required|string|max:50|unique:users,username,{$user->id}",
             'email' => "required|email|unique:users,email,{$user->id}",
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|exists:roles,name',
         ]);
 
-        $user->update(array_filter([
+        $updateData = [
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'cedula' => $data['cedula'],
-            'phone' => $data['phone'],
+            'phone' => $data['phone'] ?? null,
+            'apartment_number' => $data['apartment_number'] ?? null,
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => isset($data['password']) ? Hash::make($data['password']) : null,
-        ], fn ($v) => ! is_null($v)));
+        ];
+
+        if (! empty($data['password'])) {
+            $updateData['password'] = Hash::make($data['password']);
+        }
+
+        $user->update($updateData);
 
         $user->syncRoles([$data['role']]);
 

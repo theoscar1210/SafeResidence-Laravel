@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-vue-next';
-import { onMounted, ref, watch, computed } from 'vue';
+import {
+    AlertCircle,
+    BadgeCheck,
+    CheckCircle2,
+    Loader2,
+    User,
+} from 'lucide-vue-next';
+import { computed, onMounted, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,19 +28,46 @@ const form = useForm({
     observations: '',
 });
 
-const authorization = ref<{ type: string; end_date: string | null } | null>(
-    null,
-);
+interface AuthorizationInfo {
+    type: string;
+    end_date: string | null;
+}
+
+interface LookupResult {
+    first_name: string;
+    last_name: string;
+    apartment: string | null;
+    type: string;
+    known_in_system: boolean;
+    authorization: AuthorizationInfo | null;
+}
+
+const authorization = ref<AuthorizationInfo | null>(null);
 const noAuthorization = ref(false);
 const lookupTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+const plateTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 const searching = ref(false);
+const searchingPlate = ref(false);
 const lookupDone = ref(false);
+const knownInSystem = ref(false);
+
+function applyLookupResult(data: LookupResult) {
+    form.first_name = data.first_name ?? form.first_name;
+    form.last_name = data.last_name ?? form.last_name;
+    form.apartment = data.apartment ?? form.apartment;
+    form.type = data.type ?? form.type;
+    authorization.value = data.authorization ?? null;
+    noAuthorization.value = !data.authorization && data.type === 'visitante';
+    knownInSystem.value = data.known_in_system ?? false;
+    lookupDone.value = true;
+}
 
 async function lookup(cedula: string) {
     if (cedula.length < 3) {
         lookupDone.value = false;
         noAuthorization.value = false;
         authorization.value = null;
+        knownInSystem.value = false;
         return;
     }
     searching.value = true;
@@ -42,21 +75,35 @@ async function lookup(cedula: string) {
         const res = await fetch(
             `/vigilante/entries/lookup?cedula=${encodeURIComponent(cedula)}`,
         );
-        const data = await res.json();
+        const data: LookupResult | null = await res.json();
         if (data) {
-            form.first_name = data.first_name ?? form.first_name;
-            form.last_name = data.last_name ?? form.last_name;
-            form.apartment = data.apartment ?? form.apartment;
-            form.type = data.type ?? form.type;
-            authorization.value = data.authorization ?? null;
-            noAuthorization.value = !data.authorization;
+            applyLookupResult(data);
         } else {
             authorization.value = null;
             noAuthorization.value = false;
+            knownInSystem.value = false;
+            lookupDone.value = true;
         }
-        lookupDone.value = true;
     } finally {
         searching.value = false;
+    }
+}
+
+async function lookupPlate(plate: string) {
+    if (plate.length < 3) return;
+    searchingPlate.value = true;
+    try {
+        const res = await fetch(
+            `/vigilante/entries/lookup-plate?plate=${encodeURIComponent(plate)}`,
+        );
+        const data: (LookupResult & { cedula: string }) | null =
+            await res.json();
+        if (data) {
+            form.cedula = data.cedula;
+            applyLookupResult(data);
+        }
+    } finally {
+        searchingPlate.value = false;
     }
 }
 
@@ -67,7 +114,17 @@ watch(
         authorization.value = null;
         noAuthorization.value = false;
         lookupDone.value = false;
+        knownInSystem.value = false;
         lookupTimeout.value = setTimeout(() => lookup(val), 500);
+    },
+);
+
+watch(
+    () => form.plate,
+    (val) => {
+        if (!val || val.length < 3) return;
+        if (plateTimeout.value) clearTimeout(plateTimeout.value);
+        plateTimeout.value = setTimeout(() => lookupPlate(val), 600);
     },
 );
 
@@ -85,23 +142,27 @@ function submit() {
 }
 
 const typeOptions = [
-    { value: 'visitante', label: 'Visitante', color: 'amber' },
-    { value: 'autorizado', label: 'Autorizado', color: 'green' },
     { value: 'propietario', label: 'Propietario', color: 'blue' },
+    { value: 'residente', label: 'Residente', color: 'purple' },
+    { value: 'autorizado', label: 'Autorizado', color: 'green' },
+    { value: 'visitante', label: 'Visitante', color: 'amber' },
 ];
 
 const typeButtonClass = (value: string, color: string) => {
     const active = form.type === value;
     const map: Record<string, string> = {
-        amber: active
-            ? 'border-amber-400 bg-amber-50 text-amber-800 ring-2 ring-amber-300'
-            : 'border-input hover:border-amber-300 hover:bg-amber-50/50',
+        blue: active
+            ? 'border-blue-400 bg-blue-50 text-blue-800 ring-2 ring-blue-300'
+            : 'border-input hover:border-blue-300 hover:bg-blue-50/50',
+        purple: active
+            ? 'border-purple-400 bg-purple-50 text-purple-800 ring-2 ring-purple-300'
+            : 'border-input hover:border-purple-300 hover:bg-purple-50/50',
         green: active
             ? 'border-green-400 bg-green-50 text-green-800 ring-2 ring-green-300'
             : 'border-input hover:border-green-300 hover:bg-green-50/50',
-        blue: active
-            ? 'border-blue-400  bg-blue-50  text-blue-800  ring-2 ring-blue-300'
-            : 'border-input hover:border-blue-300  hover:bg-blue-50/50',
+        amber: active
+            ? 'border-amber-400 bg-amber-50 text-amber-800 ring-2 ring-amber-300'
+            : 'border-input hover:border-amber-300 hover:bg-amber-50/50',
     };
     return map[color];
 };
@@ -121,6 +182,19 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                     {{ auth.user.last_name }}
                 </p>
             </div>
+
+            <!-- Persona conocida en el sistema -->
+            <Transition name="alert">
+                <div
+                    v-if="knownInSystem && lookupDone"
+                    class="mb-4 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800"
+                >
+                    <BadgeCheck class="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+                    <p class="font-semibold">
+                        Persona registrada en el sistema
+                    </p>
+                </div>
+            </Transition>
 
             <!-- Alerta: AUTORIZACIÓN ACTIVA -->
             <Transition name="alert">
@@ -154,11 +228,14 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                 </div>
             </Transition>
 
-            <!-- Alerta: SIN AUTORIZACIÓN -->
+            <!-- Alerta: SIN AUTORIZACIÓN (solo para visitantes no conocidos) -->
             <Transition name="alert">
                 <div
                     v-if="
-                        noAuthorization && lookupDone && form.cedula.length >= 3
+                        noAuthorization &&
+                        lookupDone &&
+                        !knownInSystem &&
+                        form.cedula.length >= 3
                     "
                     class="mb-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
                 >
@@ -188,7 +265,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                             v-model="form.cedula"
                             placeholder="Número de cédula"
                             autocomplete="off"
-                            class="pr-24 font-mono text-base"
+                            class="pr-28 font-mono text-base"
                         />
                         <span
                             v-if="searching"
@@ -196,6 +273,13 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                         >
                             <Loader2 class="h-3 w-3 animate-spin" />
                             buscando...
+                        </span>
+                        <span
+                            v-else-if="lookupDone && knownInSystem"
+                            class="absolute top-2.5 right-3 flex items-center gap-1 text-xs font-medium text-blue-600"
+                        >
+                            <User class="h-3 w-3" />
+                            Registrado
                         </span>
                         <span
                             v-else-if="lookupDone && authorization"
@@ -240,10 +324,10 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                     <InputError :message="form.errors.apartment" />
                 </div>
 
-                <!-- Tipo — botones visuales -->
+                <!-- Tipo — 4 botones visuales -->
                 <div class="grid gap-2">
                     <Label>Tipo de persona *</Label>
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         <button
                             v-for="opt in typeOptions"
                             :key="opt.value"
@@ -277,19 +361,34 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                     <InputError :message="form.errors.vehicle" />
                 </div>
 
-                <!-- Placa — solo si tiene vehículo -->
+                <!-- Placa — aparece cuando tiene vehículo -->
                 <Transition name="alert">
                     <div v-if="needsPlate" class="grid gap-1.5">
                         <Label for="plate">Placa del vehículo</Label>
-                        <Input
-                            id="plate"
-                            v-model="form.plate"
-                            placeholder="Ej: ABC-123"
-                            class="font-mono tracking-widest uppercase"
-                            @input="
-                                form.plate = (form.plate ?? '').toUpperCase()
-                            "
-                        />
+                        <div class="relative">
+                            <Input
+                                id="plate"
+                                v-model="form.plate"
+                                placeholder="Ej: ABC-123"
+                                class="font-mono tracking-widest uppercase"
+                                @input="
+                                    form.plate = (
+                                        form.plate ?? ''
+                                    ).toUpperCase()
+                                "
+                            />
+                            <span
+                                v-if="searchingPlate"
+                                class="absolute top-2.5 right-3 flex items-center gap-1 text-xs text-muted-foreground"
+                            >
+                                <Loader2 class="h-3 w-3 animate-spin" />
+                                buscando...
+                            </span>
+                        </div>
+                        <p class="text-xs text-muted-foreground">
+                            Si la placa ya tiene ingresos previos, los datos se
+                            completarán automáticamente.
+                        </p>
                         <InputError :message="form.errors.plate" />
                     </div>
                 </Transition>

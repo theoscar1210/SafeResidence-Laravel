@@ -42,7 +42,9 @@ const typeLabel: Record<string, string> = {
         <Head title="Mis Autorizaciones" />
 
         <div class="flex flex-col gap-6 p-4 sm:p-6">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div>
                     <h1 class="text-2xl font-bold">Mis Autorizaciones</h1>
                     <p class="text-sm text-muted-foreground">

@@ -19,6 +19,7 @@ class User extends Authenticatable
         'last_name',
         'cedula',
         'phone',
+        'apartment_number',
         'username',
         'email',
         'password',

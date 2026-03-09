@@ -48,7 +48,9 @@ function destroy(id: number, name: string) {
     <AppLayout>
         <Head title="Usuarios" />
         <div class="flex flex-col gap-6 p-4 sm:p-6">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div>
                     <h1 class="text-2xl font-bold">Usuarios</h1>
                     <p class="text-sm text-muted-foreground">

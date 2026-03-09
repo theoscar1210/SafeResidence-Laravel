@@ -8,7 +8,7 @@ const { auth } = usePage<{ auth: Auth }>().props;
 
 interface Stats {
     users: number;
-    apartments: number;
+    properties: number;
     entries_today: number;
     inside: number;
     authorizations: number;
@@ -80,8 +80,8 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
                     <p class="text-3xl font-bold">{{ stats.users }}</p>
                 </div>
                 <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Apartamentos</p>
-                    <p class="text-3xl font-bold">{{ stats.apartments }}</p>
+                    <p class="text-sm text-muted-foreground">Inmuebles</p>
+                    <p class="text-3xl font-bold">{{ stats.properties }}</p>
                 </div>
                 <div class="rounded-xl border bg-card p-5 shadow-sm">
                     <p class="text-sm text-muted-foreground">

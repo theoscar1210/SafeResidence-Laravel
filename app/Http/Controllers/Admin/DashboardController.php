@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Apartment;
 use App\Models\Authorization;
+use App\Models\Property;
 use App\Models\Entry;
 use App\Models\User;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         $stats = [
             'users' => User::count(),
-            'apartments' => Apartment::count(),
+            'properties' => Property::count(),
             'entries_today' => Entry::today()->count(),
             'inside' => Entry::active()->count(),
             'authorizations' => Authorization::active()->count(),

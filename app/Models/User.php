@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +20,6 @@ class User extends Authenticatable
         'last_name',
         'cedula',
         'phone',
-        'apartment_number',
         'username',
         'email',
         'password',
@@ -46,18 +46,61 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function apartment(): HasOne
+    /** Propiedades que posee (propietario) */
+    public function ownedProperties(): BelongsToMany
     {
-        return $this->hasOne(Apartment::class);
+        return $this->belongsToMany(Property::class, 'property_ownerships')
+            ->withPivot('since_date')
+            ->withTimestamps();
     }
 
+    /** Arrendamiento activo (residente) */
+    public function activeRental(): HasOne
+    {
+        return $this->hasOne(PropertyRental::class)->where('is_active', true)->latestOfMany('start_date');
+    }
+
+    /** Historial de arrendamientos (residente) */
+    public function rentals(): HasMany
+    {
+        return $this->hasMany(PropertyRental::class);
+    }
+
+    /** Núcleo familiar registrado */
+    public function familyMembers(): HasMany
+    {
+        return $this->hasMany(FamilyMember::class);
+    }
+
+    /** Autorizaciones emitidas (propietario) */
     public function authorizations(): HasMany
     {
         return $this->hasMany(Authorization::class);
     }
 
+    /** Registros de entrada por este usuario (vigilante registró) */
     public function entries(): HasMany
     {
         return $this->hasMany(Entry::class);
+    }
+
+    /**
+     * Obtiene el número de inmueble principal de este usuario.
+     * Para propietario: primera propiedad propia.
+     * Para residente: propiedad del arrendamiento activo.
+     */
+    public function getPropertyNumberAttribute(): ?string
+    {
+        $role = $this->getRoleNames()->first();
+
+        if ($role === 'Propietario') {
+            return $this->ownedProperties()->first()?->number;
+        }
+
+        if ($role === 'Residente') {
+            return $this->activeRental?->property?->number;
+        }
+
+        return null;
     }
 }

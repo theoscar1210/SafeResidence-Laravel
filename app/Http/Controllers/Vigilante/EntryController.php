@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vigilante;
 use App\Http\Controllers\Controller;
 use App\Models\Authorization;
 use App\Models\Entry;
+use App\Models\FamilyMember;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -103,26 +104,37 @@ class EntryController extends Controller
         }
 
         $user = User::where('cedula', $cedula)->first();
+        $familyMember = $user ? null : FamilyMember::with('user.ownedProperties', 'user.activeRental.property')->where('cedula', $cedula)->first();
         $authorization = Authorization::active()->where('cedula', $cedula)->first();
         $lastEntry = Entry::where('cedula', $cedula)->latest('entry_at')->first();
 
-        if (! $user && ! $authorization && ! $lastEntry) {
+        if (! $user && ! $familyMember && ! $authorization && ! $lastEntry) {
             return response()->json(null);
         }
 
         $type = null;
         $apartment = null;
         $knownInSystem = false;
+        $firstName = null;
+        $lastName = null;
 
         if ($user) {
             $knownInSystem = true;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
             $roleName = $user->getRoleNames()->first();
             $type = match ($roleName) {
                 'Propietario' => 'propietario',
                 'Residente' => 'residente',
                 default => null,
             };
-            $apartment = $user->apartment_number;
+            $apartment = $user->property_number;
+        } elseif ($familyMember) {
+            $knownInSystem = true;
+            $firstName = $familyMember->first_name;
+            $lastName = $familyMember->last_name;
+            $type = 'autorizado';
+            $apartment = $familyMember->user->property_number;
         }
 
         if (! $apartment) {
@@ -134,8 +146,8 @@ class EntryController extends Controller
         }
 
         return response()->json([
-            'first_name' => $user?->first_name ?? $lastEntry?->first_name ?? $authorization?->first_name,
-            'last_name' => $user?->last_name ?? $lastEntry?->last_name ?? $authorization?->last_name,
+            'first_name' => $firstName ?? $lastEntry?->first_name ?? $authorization?->first_name,
+            'last_name' => $lastName ?? $lastEntry?->last_name ?? $authorization?->last_name,
             'apartment' => $apartment,
             'type' => $type ?? 'visitante',
             'known_in_system' => $knownInSystem,
@@ -163,11 +175,14 @@ class EntryController extends Controller
             return response()->json(null);
         }
 
-        $user = User::where('cedula', $lastEntry->cedula)->first();
-        $authorization = Authorization::active()->where('cedula', $lastEntry->cedula)->first();
+        $cedula = $lastEntry->cedula;
+        $user = User::where('cedula', $cedula)->first();
+        $familyMember = $user ? null : FamilyMember::with('user')->where('cedula', $cedula)->first();
+        $authorization = Authorization::active()->where('cedula', $cedula)->first();
 
         $type = null;
         $knownInSystem = false;
+        $apartment = $lastEntry->apartment;
 
         if ($user) {
             $knownInSystem = true;
@@ -177,6 +192,11 @@ class EntryController extends Controller
                 'Residente' => 'residente',
                 default => null,
             };
+            $apartment = $user->property_number ?? $apartment;
+        } elseif ($familyMember) {
+            $knownInSystem = true;
+            $type = 'autorizado';
+            $apartment = $familyMember->user->property_number ?? $apartment;
         }
 
         if (! $type) {
@@ -184,10 +204,10 @@ class EntryController extends Controller
         }
 
         return response()->json([
-            'cedula' => $lastEntry->cedula,
-            'first_name' => $user?->first_name ?? $lastEntry->first_name,
-            'last_name' => $user?->last_name ?? $lastEntry->last_name,
-            'apartment' => $user?->apartment_number ?? $lastEntry->apartment,
+            'cedula' => $cedula,
+            'first_name' => $user?->first_name ?? $familyMember?->first_name ?? $lastEntry->first_name,
+            'last_name' => $user?->last_name ?? $familyMember?->last_name ?? $lastEntry->last_name,
+            'apartment' => $apartment,
             'type' => $type ?? 'visitante',
             'known_in_system' => $knownInSystem,
             'authorization' => $authorization ? [

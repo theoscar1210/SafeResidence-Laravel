@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EntryController as AdminEntryController;
+use App\Http\Controllers\Admin\FamilyMemberController;
+use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
@@ -28,6 +30,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::get('entries', [AdminEntryController::class, 'index'])->name('entries.index');
+
+        // Inmuebles
+        Route::resource('properties', PropertyController::class)->only(['index', 'create', 'store', 'show', 'update', 'destroy']);
+        Route::post('properties/{property}/assign-owner', [PropertyController::class, 'assignOwner'])->name('properties.assign-owner');
+        Route::delete('properties/{property}/owners/{user}', [PropertyController::class, 'removeOwner'])->name('properties.remove-owner');
+        Route::post('properties/{property}/assign-tenant', [PropertyController::class, 'assignTenant'])->name('properties.assign-tenant');
+        Route::post('properties/{property}/end-rental', [PropertyController::class, 'endRental'])->name('properties.end-rental');
+
+        // Núcleo familiar
+        Route::post('family-members', [FamilyMemberController::class, 'store'])->name('family-members.store');
+        Route::put('family-members/{familyMember}', [FamilyMemberController::class, 'update'])->name('family-members.update');
+        Route::delete('family-members/{familyMember}', [FamilyMemberController::class, 'destroy'])->name('family-members.destroy');
     });
 
     // Vigilante

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,17 +12,12 @@ const form = useForm({
     last_name: '',
     cedula: '',
     phone: '',
-    apartment_number: '',
     username: '',
     email: '',
     password: '',
     password_confirmation: '',
     role: '',
 });
-
-const needsApartment = computed(
-    () => form.role === 'Propietario' || form.role === 'Residente',
-);
 
 function submit() {
     form.post('/admin/users');
@@ -116,33 +110,6 @@ function submit() {
                     </p>
                 </div>
 
-                <!-- Apartamento — solo para Propietario o Residente -->
-                <Transition name="alert">
-                    <div v-if="needsApartment" class="grid gap-1.5">
-                        <Label for="apartment_number">
-                            Número de Apartamento *
-                        </Label>
-                        <Input
-                            id="apartment_number"
-                            v-model="form.apartment_number"
-                            placeholder="Ej: 101, A-302, Torre B-205"
-                        />
-                        <p class="text-xs text-muted-foreground">
-                            Apartamento donde reside este
-                            {{
-                                form.role === 'Propietario'
-                                    ? 'propietario'
-                                    : 'residente'
-                            }}.
-                        </p>
-                        <p
-                            v-if="form.errors.apartment_number"
-                            class="text-xs text-destructive"
-                        >
-                            {{ form.errors.apartment_number }}
-                        </p>
-                    </div>
-                </Transition>
 
                 <div class="grid gap-1.5">
                     <Label for="username">Usuario *</Label>
@@ -208,14 +175,3 @@ function submit() {
     </AppLayout>
 </template>
 
-<style scoped>
-.alert-enter-active,
-.alert-leave-active {
-    transition: all 0.2s ease;
-}
-.alert-enter-from,
-.alert-leave-to {
-    opacity: 0;
-    transform: translateY(-4px);
-}
-</style>

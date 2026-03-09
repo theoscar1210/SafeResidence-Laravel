@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import {
+    Building2,
     ClipboardList,
     FileText,
     History,
@@ -32,6 +33,7 @@ const navByRole: Record<string, NavItem[]> = {
         { title: 'Dashboard', href: '/admin/dashboard', icon: LayoutGrid },
         { title: 'Usuarios', href: '/admin/users', icon: Users },
         { title: 'Ingresos', href: '/admin/entries', icon: ClipboardList },
+        { title: 'Inmuebles', href: '/admin/properties', icon: Building2 },
     ],
     Vigilante: [
         { title: 'Dashboard', href: '/vigilante/dashboard', icon: LayoutGrid },

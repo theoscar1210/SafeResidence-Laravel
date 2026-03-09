@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCESO · Brand Identity System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --night: #0A0E1A;
+    --deep: #0F1628;
+    --panel: #141D35;
+    --border: #1E2D4D;
+    --accent-blue: #1E6FFF;
+    --accent-teal: #00D9B8;
+    --accent-glow: rgba(30,111,255,0.18);
+    --text-primary: #E8EDF8;
+    --text-muted: #7A8BAD;
+    --text-dim: #3D4F72;
+    --white: #ffffff;
+    --gold: #F5A623;
+  }
+
+  body {
+    background: var(--night);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRID BACKGROUND ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 64px 32px; }
+
+  /* ─── HEADER ─── */
+  .brand-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .brand-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent-teal);
+    margin-bottom: 12px;
+  }
+  .brand-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+  .brand-header h1 span { color: var(--accent-blue); }
+  .brand-header p {
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 480px;
+    margin-inline: auto;
+    line-height: 1.6;
+  }
+
+  /* ─── SECTION LABELS ─── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-label .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 0.2em;
+    background: rgba(30,111,255,0.1);
+    border: 1px solid rgba(30,111,255,0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+  .section-label h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 24px;
+  }
+  .card.glow {
+    box-shadow: 0 0 60px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  /* ─── LOGO SHOWCASE ─── */
+  .logo-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .logo-panel {
+    padding: 52px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+  }
+  .logo-panel.light-bg { background: #F0F4FF; }
+  .logo-panel.dark-bg { background: var(--deep); border: 1px solid var(--border); }
+  .logo-panel.black-bg { background: #000000; }
+  .logo-panel.white-bg { background: #FFFFFF; }
+
+  .panel-tag {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    font-weight: 500;
+  }
+  .light-bg .panel-tag, .white-bg .panel-tag { color: #000; }
+  .dark-bg .panel-tag, .black-bg .panel-tag { color: #fff; }
+
+  /* ─── THE LOGO SVG ─── */
+  .logo-svg-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+  /* ─── ICON GRID ─── */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .icon-cell {
+    aspect-ratio: 1;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .icon-cell.dark { background: var(--deep); border: 1px solid var(--border); }
+  .icon-cell.blue { background: var(--accent-blue); }
+  .icon-cell.teal { background: var(--accent-teal); }
+  .icon-cell.light { background: #EBF0FF; }
+  .icon-cell .icon-label {
+    position: absolute;
+    bottom: 8px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    font-weight: 600;
+  }
+  .icon-cell.light .icon-label { color: #000; }
+
+  /* ─── COLOR PALETTE ─── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+  .swatch {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .swatch-color {
+    height: 72px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .swatch-info {
+    padding: 10px 4px 0;
+  }
+  .swatch-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .swatch-hex {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.05em;
+  }
+  .swatch-role {
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 2px;
+    display: block;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .type-specimen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .type-block { padding: 28px; background: var(--deep); border: 1px solid var(--border); border-radius: 12px; }
+  .type-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-teal); margin-bottom: 16px; }
+  .type-big { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; line-height: 1; color: var(--white); margin-bottom: 8px; }
+  .type-medium { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  .type-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .type-meta { font-size: 11px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; }
+  .font-name { font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px; }
+  .font-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── CONCEPT GRID ─── */
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .concept-item {
+    padding: 24px 20px;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-top: 2px solid var(--accent-blue);
+  }
+  .concept-icon { font-size: 22px; margin-bottom: 10px; }
+  .concept-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 6px; letter-spacing: 0.02em; }
+  .concept-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── SYMBOL BREAKDOWN ─── */
+  .symbol-breakdown {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .symbol-large {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 32px;
+    flex-shrink: 0;
+  }
+  .symbol-annotations { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
+  .annotation {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .ann-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .ann-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+  .ann-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── HORIZONTAL LOGO ─── */
+  .logo-horiz {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .logo-showcase { grid-template-columns: 1fr; }
+    .icon-grid { grid-template-columns: repeat(2, 1fr); }
+    .palette-grid { grid-template-columns: repeat(3, 1fr); }
+    .type-specimen { grid-template-columns: 1fr; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .symbol-breakdown { grid-template-columns: 1fr; }
+  }
+
+  /* ─── DOWNLOAD NOTE ─── */
+  .download-note {
+    text-align: center;
+    margin-top: 48px;
+    padding: 24px;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .download-note strong { color: var(--accent-teal); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="brand-header">
+    <p class="eyebrow">Sistema de Identidad Visual · 2025</p>
+    <h1>ACCESO<span>·</span>GUARD</h1>
+    <p>Sistema inteligente de control de accesos para porterías residenciales y condominios</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 1 · CONCEPTO DEL LOGO
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">01</span>
+    <h2>Concepto del Logo</h2>
+  </div>
+
+  <div class="card glow" style="margin-bottom:40px;">
+    <div class="concept-grid">
+      <div class="concept-item">
+        <div class="concept-icon">🔒</div>
+        <div class="concept-title">La Puerta Inteligente</div>
+        <div class="concept-text">El isotipo fusiona un arco de puerta con un símbolo de verificación digital, transmitiendo acceso controlado y tecnología en un solo gesto visual.</div>
+      </div>
+      <div class="concept-item" style="border-top-color: var(--accent-teal);">
+        <div class="concept-icon">⬡</div>
+        <div class="concept-title">Geometría Hexagonal</div>
+        <div class="concept-text">El hexágono evoca celdas de seguridad, redes y sistemas organizados. Su perfección geométrica comunica precisión y confianza tecnológica.</div>
+      </div>
+      <div class="concept-item" style="border-top-color: var(--gold);">
+        <div class="concept-icon">✓</div>
+        <div class="concept-title">El Check de Acceso</div>
+        <div class="concept-text">Una marca de verificación integrada en el interior del símbolo comunica aprobación, validación y control positivo de manera universal.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 2 · LOGO SHOWCASE
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">02</span>
+    <h2>Variantes del Logo</h2>
+  </div>
+
+  <!-- DARK MODE - Horizontal -->
+  <div class="logo-showcase" style="margin-bottom:2px; border-radius:16px 16px 0 0;">
+    <div class="logo-panel dark-bg">
+      <span class="panel-tag">Modo Oscuro · Horizontal</span>
+      <div class="logo-horiz">
+        <!-- ISOTIPO -->
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.15"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.5"/>
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#00D9B8" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <!-- WORDMARK -->
+        <div class="logo-wordmark">
+          <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:0.08em;line-height:1;">ACCESO</span>
+          <span style="font-size:9px;letter-spacing:0.35em;color:#00D9B8;text-transform:uppercase;font-weight:600;margin-top:2px;">GUARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="logo-panel dark-bg">
+      <span class="panel-tag">Modo Oscuro · Vertical</span>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+        <svg width="60" height="60" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.15"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.5"/>
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#00D9B8" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div style="text-align:center;">
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:0.1em;">ACCESO</div>
+          <div style="font-size:9px;letter-spacing:0.4em;color:#00D9B8;text-transform:uppercase;font-weight:600;margin-top:3px;">GUARD</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHT MODE -->
+  <div class="logo-showcase" style="border-radius:0 0 16px 16px; margin-bottom:24px;">
+    <div class="logo-panel light-bg">
+      <span class="panel-tag">Modo Claro · Horizontal</span>
+      <div class="logo-horiz">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.1"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.5"/>
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#0066DD" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <circle cx="26" cy="31" r="2" fill="#fff"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#0A1628;letter-spacing:0.08em;">ACCESO</span>
+          <span style="font-size:9px;letter-spacing:0.35em;color:#1E6FFF;text-transform:uppercase;font-weight:600;margin-top:2px;">GUARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="logo-panel white-bg">
+      <span class="panel-tag">Modo Claro · Solo Isotipo</span>
+      <svg width="80" height="80" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.08"/>
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.5"/>
+        <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#0066DD" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+        <circle cx="26" cy="31" r="2" fill="#fff"/>
+        <line x1="26" y1="31" x2="26" y2="34" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 3 · APP ICONS
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">03</span>
+    <h2>Iconos de Aplicación</h2>
+  </div>
+
+  <div class="icon-grid" style="margin-bottom:40px;">
+    <!-- Icon Dark Blue -->
+    <div class="icon-cell dark" style="border-radius:28px;">
+      <svg width="56%" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.2"/>
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="2"/>
+        <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#00D9B8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+        <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+        <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="icon-label" style="color:#fff;">Dark</span>
+    </div>
+    <!-- Icon Solid Blue -->
+    <div class="icon-cell blue" style="border-radius:28px;">
+      <svg width="56%" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="rgba(255,255,255,0.15)"/>
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="25" width="14" height="11" rx="2.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="26" cy="31" r="2" fill="#1E6FFF"/>
+        <line x1="26" y1="31" x2="26" y2="34" stroke="#1E6FFF" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="icon-label" style="color:#fff;">Blue</span>
+    </div>
+    <!-- Icon Teal -->
+    <div class="icon-cell teal" style="border-radius:28px;">
+      <svg width="56%" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="rgba(255,255,255,0.15)"/>
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="rgba(0,40,40,0.4)" stroke-width="2"/>
+        <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#003030" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#005050"/>
+        <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+        <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="icon-label" style="color:#002">Teal</span>
+    </div>
+    <!-- Icon Light -->
+    <div class="icon-cell light" style="border-radius:28px;">
+      <svg width="56%" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.12"/>
+        <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="2"/>
+        <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#1E6FFF" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+        <circle cx="26" cy="31" r="2" fill="#fff"/>
+        <line x1="26" y1="31" x2="26" y2="34" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="icon-label" style="color:#000;">Light</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 4 · SIGNIFICADO DEL SÍMBOLO
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">04</span>
+    <h2>Anatomía del Símbolo</h2>
+  </div>
+
+  <div class="card" style="margin-bottom:40px;">
+    <div class="symbol-breakdown">
+      <div class="symbol-large">
+        <svg width="140" height="140" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Hex glow -->
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" opacity="0.12"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.5"/>
+          <!-- Arc shackle -->
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#00D9B8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <!-- Lock body -->
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <!-- Keyhole -->
+          <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="symbol-annotations">
+        <div class="annotation">
+          <div class="ann-dot" style="background:#1E6FFF;"></div>
+          <div>
+            <div class="ann-title">Hexágono Exterior</div>
+            <div class="ann-text">Representa la estructura, la red y los nodos de un sistema organizado. El hexágono es la forma más eficiente en la naturaleza: evoca solidez y precisión tecnológica.</div>
+          </div>
+        </div>
+        <div class="annotation">
+          <div class="ann-dot" style="background:#00D9B8;"></div>
+          <div>
+            <div class="ann-title">Arco del Candado</div>
+            <div class="ann-text">El arco abierto hacia arriba sugiere apertura controlada y acceso gestionado. No es un candado cerrado —es un sistema de control activo y dinámico.</div>
+          </div>
+        </div>
+        <div class="annotation">
+          <div class="ann-dot" style="background:#1E6FFF;"></div>
+          <div>
+            <div class="ann-title">Cuerpo del Candado</div>
+            <div class="ann-text">Base sólida que ancla la identidad visual. Comunica robustez, fiabilidad y la presencia física del sistema en la portería.</div>
+          </div>
+        </div>
+        <div class="annotation">
+          <div class="ann-dot" style="background:#00D9B8;"></div>
+          <div>
+            <div class="ann-title">Llave / Indicador de Estado</div>
+            <div class="ann-text">El punto circular con línea inferior evoca tanto un ojo de cerradura como un indicador de estado digital: "verificado", "autorizado", "acceso permitido".</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 5 · PALETA DE COLORES
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">05</span>
+    <h2>Paleta de Colores</h2>
+  </div>
+
+  <div class="card" style="margin-bottom:40px;">
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1E6FFF; box-shadow: 0 8px 24px rgba(30,111,255,0.4);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Azul Primario</span>
+          <span class="swatch-hex">#1E6FFF</span>
+          <span class="swatch-role">Principal · CTA</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#00D9B8;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Teal Acento</span>
+          <span class="swatch-hex">#00D9B8</span>
+          <span class="swatch-role">Acceso · OK</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0A0E1A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Noche</span>
+          <span class="swatch-hex">#0A0E1A</span>
+          <span class="swatch-role">Fondo oscuro</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#141D35;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Panel</span>
+          <span class="swatch-hex">#141D35</span>
+          <span class="swatch-role">Superficies UI</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FF4757;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Rojo Alerta</span>
+          <span class="swatch-hex">#FF4757</span>
+          <span class="swatch-role">Denegado · Error</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F5A623;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Ámbar</span>
+          <span class="swatch-hex">#F5A623</span>
+          <span class="swatch-role">Pendiente · Aviso</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px; padding:16px; background:var(--deep); border-radius:10px; border:1px solid var(--border); font-size:12px; color:var(--text-muted); line-height:1.7;">
+      <strong style="color:var(--accent-teal);">Lógica semántica del color:</strong> El azul primario (#1E6FFF) construye confianza y autoridad tecnológica. El teal (#00D9B8) señala estados positivos (acceso concedido, verificado). El rojo (#FF4757) comunica restricción o alarma. El ámbar (#F5A623) indica estados de espera. Esta triada funcional hace que la interfaz sea intuitiva sin necesidad de texto.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 6 · TIPOGRAFÍA
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">06</span>
+    <h2>Sistema Tipográfico</h2>
+  </div>
+
+  <div class="type-specimen" style="margin-bottom:40px;">
+    <div class="type-block">
+      <div class="type-label">Display · Headings</div>
+      <div class="type-big">Syne</div>
+      <div class="type-medium" style="font-family:'Syne',sans-serif;font-weight:700;">Control total del acceso</div>
+      <div style="height:1px;background:var(--border);margin:14px 0;"></div>
+      <div class="font-name">Syne · 700/800</div>
+      <div class="font-desc">Geométrica, moderna y de carácter fuerte. Ideal para títulos, el wordmark y encabezados de sección. Evoca precisión de ingeniería.</div>
+    </div>
+    <div class="type-block">
+      <div class="type-label">Body · Interface</div>
+      <div style="font-size:28px;font-weight:500;color:var(--white);margin-bottom:8px;">DM Sans</div>
+      <div class="type-body">Visitante autorizado · Acceso permitido a partir de las 08:00h hasta las 20:00h, todos los días.</div>
+      <div style="height:1px;background:var(--border);margin:14px 0;"></div>
+      <div class="font-name">DM Sans · 300/400/600</div>
+      <div class="font-desc">Humanista y altamente legible en pantallas pequeñas. Perfecta para interfaces, tablas de datos y formularios del sistema.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 7 · SVG EXPORTABLE
+  ══════════════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="num">07</span>
+    <h2>SVG Listo para Web</h2>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+      Logo horizontal en SVG optimizado. Puede usarse directamente en tu HTML como <code style="background:var(--deep);color:var(--accent-teal);padding:2px 6px;border-radius:4px;font-size:11px;">&lt;img src="acceso-guard.svg"&gt;</code> o inline.
+    </p>
+
+    <!-- THE EXPORTABLE SVG -->
+    <div style="background:#fff;border-radius:12px;padding:32px;display:flex;justify-content:center;align-items:center;margin-bottom:16px;">
+      <svg id="export-logo" width="280" height="64" viewBox="0 0 280 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- ISOTIPO 64x64 viewBox mapped into 64x64 space -->
+        <g transform="translate(0,6) scale(1.0)">
+          <!-- Hex -->
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" fill-opacity="0.1"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.8"/>
+          <!-- Arc -->
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#1E6FFF" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <!-- Body -->
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <!-- Keyhole -->
+          <circle cx="26" cy="31" r="2" fill="#ffffff"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <!-- WORDMARK -->
+        <text x="62" y="34" font-family="'Syne', 'Arial Black', sans-serif" font-weight="800" font-size="26" fill="#0A1628" letter-spacing="3">ACCESO</text>
+        <text x="63" y="50" font-family="'DM Sans', Arial, sans-serif" font-weight="600" font-size="10" fill="#1E6FFF" letter-spacing="6">GUARD</text>
+      </svg>
+    </div>
+
+    <!-- Dark version -->
+    <div style="background:#0A0E1A;border-radius:12px;padding:32px;display:flex;justify-content:center;align-items:center;border:1px solid #1E2D4D;">
+      <svg width="280" height="64" viewBox="0 0 280 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(0,6) scale(1.0)">
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" fill-opacity="0.15"/>
+          <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.8"/>
+          <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26" stroke="#00D9B8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+          <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+          <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <text x="62" y="34" font-family="'Syne', 'Arial Black', sans-serif" font-weight="800" font-size="26" fill="#E8EDF8" letter-spacing="3">ACCESO</text>
+        <text x="63" y="50" font-family="'DM Sans', Arial, sans-serif" font-weight="600" font-size="10" fill="#00D9B8" letter-spacing="6">GUARD</text>
+      </svg>
+    </div>
+
+    <!-- CODE BLOCK -->
+    <details style="margin-top:20px;">
+      <summary style="cursor:pointer;font-size:12px;color:var(--accent-teal);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:8px 0;">Ver código SVG exportable</summary>
+      <pre style="margin-top:12px;background:#000;border-radius:10px;padding:20px;font-size:11px;color:#00D9B8;overflow-x:auto;line-height:1.6;"><code>&lt;!-- AccesoGuard Logo · Modo Oscuro --&gt;
+&lt;svg width="280" height="64" viewBox="0 0 280 64"
+     fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+
+  &lt;!-- Isotipo --&gt;
+  &lt;g transform="translate(0,6)"&gt;
+    &lt;polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5"
+      fill="#1E6FFF" fill-opacity="0.15"/&gt;
+    &lt;polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5"
+      fill="none" stroke="#1E6FFF" stroke-width="1.8"/&gt;
+    &lt;path d="M18 26 C18 19.37 21.58 14 26 14
+             C30.42 14 34 19.37 34 26"
+      stroke="#00D9B8" stroke-width="2.2"
+      fill="none" stroke-linecap="round"/&gt;
+    &lt;rect x="19" y="25" width="14" height="11"
+      rx="2.5" fill="#1E6FFF"/&gt;
+    &lt;circle cx="26" cy="31" r="2" fill="#00D9B8"/&gt;
+    &lt;line x1="26" y1="31" x2="26" y2="34"
+      stroke="#00D9B8" stroke-width="1.5"
+      stroke-linecap="round"/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Wordmark --&gt;
+  &lt;text x="62" y="34"
+    font-family="'Syne','Arial Black',sans-serif"
+    font-weight="800" font-size="26"
+    fill="#E8EDF8" letter-spacing="3"&gt;ACCESO&lt;/text&gt;
+  &lt;text x="63" y="50"
+    font-family="'DM Sans',Arial,sans-serif"
+    font-weight="600" font-size="10"
+    fill="#00D9B8" letter-spacing="6"&gt;GUARD&lt;/text&gt;
+
+&lt;/svg&gt;</code></pre>
+    </details>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <div class="download-note">
+    <strong>AccesoGuard · Sistema de Identidad Visual Completo</strong><br>
+    Isotipo · Wordmark · Paleta semántica · Tipografía Syne + DM Sans<br>
+    <span style="font-size:11px;opacity:0.6;">SVG escalable · Compatible web, móvil y documentos · Modo claro y oscuro</span>
+  </div>
+
+</div>
+</body>
+</html>

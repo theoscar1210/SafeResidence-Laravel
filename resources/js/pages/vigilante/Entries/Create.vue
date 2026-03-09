@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import {
     AlertCircle,
     BadgeCheck,
@@ -175,7 +175,8 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
         <Head title="Registrar Ingreso" />
 
         <div class="mx-auto max-w-2xl p-4 sm:p-6">
-            <div class="mb-6">
+            <div class="mb-6 flex flex-col gap-1">
+                <Link href="/vigilante/entries" class="text-sm text-muted-foreground hover:text-foreground">← Monitor de Ingresos</Link>
                 <h1 class="text-2xl font-bold">Registrar Ingreso</h1>
                 <p class="text-sm text-muted-foreground">
                     Vigilante: {{ auth.user.first_name }}
@@ -406,9 +407,16 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                     <InputError :message="form.errors.observations" />
                 </div>
 
+                <div class="flex gap-3">
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="flex-1"
+                    @click="form.reset(); authorization = null; noAuthorization = false; lookupDone = false; knownInSystem = false;"
+                >Limpiar</Button>
                 <Button
                     type="submit"
-                    class="w-full"
+                    class="flex-1"
                     size="lg"
                     :disabled="form.processing"
                 >
@@ -420,6 +428,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                         form.processing ? 'Registrando...' : 'Registrar Ingreso'
                     }}
                 </Button>
+                </div>
             </form>
         </div>
     </AppLayout>

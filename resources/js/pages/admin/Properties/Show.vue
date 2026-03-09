@@ -238,7 +238,10 @@ const relatedUsers = [
                         <Label for="description">Descripción</Label>
                         <Input id="description" v-model="editForm.description" />
                     </div>
-                    <div class="flex justify-end">
+                    <div class="flex justify-end gap-3">
+                        <Button type="button" variant="outline" @click="editForm.reset()">
+                            Restaurar
+                        </Button>
                         <Button type="submit" :disabled="editForm.processing">
                             {{ editForm.processing ? 'Guardando...' : 'Guardar cambios' }}
                         </Button>
@@ -299,9 +302,14 @@ const relatedUsers = [
                             <Label>Fecha desde</Label>
                             <Input type="date" v-model="ownerForm.since_date" />
                         </div>
-                        <Button type="submit" :disabled="ownerForm.processing || !ownerForm.user_id">
-                            Asignar propietario
-                        </Button>
+                        <div class="flex gap-3">
+                            <Button type="button" variant="outline" @click="ownerForm.reset()">
+                                Limpiar
+                            </Button>
+                            <Button type="submit" :disabled="ownerForm.processing || !ownerForm.user_id">
+                                Asignar propietario
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -373,9 +381,14 @@ const relatedUsers = [
                                 <Input type="date" v-model="tenantForm.end_date" />
                             </div>
                         </div>
-                        <Button type="submit" :disabled="tenantForm.processing || !tenantForm.user_id || !tenantForm.start_date">
-                            Registrar arrendatario
-                        </Button>
+                        <div class="flex gap-3">
+                            <Button type="button" variant="outline" @click="tenantForm.reset()">
+                                Limpiar
+                            </Button>
+                            <Button type="submit" :disabled="tenantForm.processing || !tenantForm.user_id || !tenantForm.start_date">
+                                Registrar arrendatario
+                            </Button>
+                        </div>
                     </form>
                 </div>
 
@@ -508,12 +521,17 @@ const relatedUsers = [
                                 {{ familyForm.errors.relationship }}
                             </p>
                         </div>
-                        <Button
-                            type="submit"
-                            :disabled="familyForm.processing || !familyForm.user_id || !familyForm.first_name || !familyForm.cedula"
-                        >
-                            Agregar familiar
-                        </Button>
+                        <div class="flex gap-3">
+                            <Button type="button" variant="outline" @click="familyForm.reset()">
+                                Limpiar
+                            </Button>
+                            <Button
+                                type="submit"
+                                :disabled="familyForm.processing || !familyForm.user_id || !familyForm.first_name || !familyForm.cedula"
+                            >
+                                Agregar familiar
+                            </Button>
+                        </div>
                     </form>
                 </div>
                 <div v-else class="rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">

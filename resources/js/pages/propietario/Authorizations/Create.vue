@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,8 @@ function submit() {
         <Head title="Nueva Autorización" />
 
         <div class="mx-auto max-w-2xl p-4 sm:p-6">
-            <div class="mb-6">
+            <div class="mb-6 flex flex-col gap-1">
+                <Link href="/propietario/authorizations" class="text-sm text-muted-foreground hover:text-foreground">← Mis Autorizaciones</Link>
                 <h1 class="text-2xl font-bold">Nueva Autorización</h1>
                 <p class="text-sm text-muted-foreground">
                     Autoriza el ingreso de una persona a tu apartamento
@@ -129,16 +130,16 @@ function submit() {
                     <InputError :message="form.errors.observations" />
                 </div>
 
-                <div class="flex gap-3">
+                <div class="flex flex-wrap gap-3">
                     <Button type="submit" :disabled="form.processing">
                         Crear Autorización
                     </Button>
-                    <a
-                        href="/propietario/authorizations"
-                        class="inline-flex h-9 items-center rounded-md border px-4 text-sm hover:bg-muted"
-                    >
-                        Cancelar
-                    </a>
+                    <Button type="button" variant="outline" @click="form.reset()">
+                        Limpiar
+                    </Button>
+                    <Link href="/propietario/authorizations">
+                        <Button type="button" variant="ghost">Cancelar</Button>
+                    </Link>
                 </div>
             </form>
         </div>

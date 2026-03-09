@@ -165,9 +165,16 @@ async function exportReport() {
                     </select>
                 </div>
 
+                <div class="flex gap-3">
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="flex-1"
+                    @click="filters = { format: 'pdf', date_from: '', date_to: '', type: '', cedula: '', only: '' }"
+                >Limpiar</Button>
                 <Button
                     @click="exportReport"
-                    class="w-full"
+                    class="flex-1"
                     :disabled="loading"
                 >
                     <span v-if="loading">Generando reporte...</span>
@@ -179,6 +186,7 @@ async function exportReport() {
                         }}
                     </span>
                 </Button>
+                </div>
             </div>
         </div>
     </AppLayout>

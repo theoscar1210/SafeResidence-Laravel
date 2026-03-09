@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import { X } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -53,12 +54,20 @@ const typeLabel: Record<string, string> = {
             </div>
 
             <!-- Búsqueda -->
-            <input
-                v-model="search"
-                type="text"
-                placeholder="Buscar por nombre o cédula..."
-                class="flex h-9 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground"
-            />
+            <div class="relative w-full max-w-sm">
+                <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Buscar por nombre o cédula..."
+                    :class="['flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground', search ? 'pr-8' : '']"
+                />
+                <button
+                    v-if="search"
+                    @click="search = ''"
+                    class="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground"
+                    title="Limpiar búsqueda"
+                ><X class="h-4 w-4" /></button>
+            </div>
 
             <!-- Vacío -->
             <div

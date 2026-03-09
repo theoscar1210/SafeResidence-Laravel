@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,11 +63,19 @@ function destroy(id: number, name: string) {
                 </Link>
             </div>
 
-            <Input
-                v-model="search"
-                placeholder="Buscar por nombre, usuario, cédula o correo..."
-                class="w-full sm:max-w-sm"
-            />
+            <div class="relative w-full sm:max-w-sm">
+                <Input
+                    v-model="search"
+                    placeholder="Buscar por nombre, usuario, cédula o correo..."
+                    :class="search ? 'pr-8' : ''"
+                />
+                <button
+                    v-if="search"
+                    @click="search = ''"
+                    class="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground"
+                    title="Limpiar búsqueda"
+                ><X class="h-4 w-4" /></button>
+            </div>
 
             <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
                 <table class="w-full text-sm">

@@ -1,0 +1,27 @@
+<svg width="280" height="64" viewBox="0 0 280 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- AccesoGuard · Logo Horizontal · Modo Oscuro -->
+  <!-- Isotipo: Hexágono + Candado -->
+  <g transform="translate(0,6)">
+    <!-- Hexágono fondo -->
+    <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="#1E6FFF" fill-opacity="0.15"/>
+    <!-- Hexágono borde -->
+    <polygon points="26,2 49,14.5 49,37.5 26,50 3,37.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="1.8"/>
+    <!-- Arco candado -->
+    <path d="M18 26 C18 19.37 21.58 14 26 14 C30.42 14 34 19.37 34 26"
+          stroke="#00D9B8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <!-- Cuerpo candado -->
+    <rect x="19" y="25" width="14" height="11" rx="2.5" fill="#1E6FFF"/>
+    <!-- Ojo de cerradura -->
+    <circle cx="26" cy="31" r="2" fill="#00D9B8"/>
+    <line x1="26" y1="31" x2="26" y2="34" stroke="#00D9B8" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="62" y="34"
+        font-family="'Syne', 'Arial Black', sans-serif"
+        font-weight="800" font-size="26"
+        fill="#0A1628" letter-spacing="3">ACCESO</text>
+  <text x="63" y="50"
+        font-family="'DM Sans', Arial, sans-serif"
+        font-weight="600" font-size="10"
+        fill="#1E6FFF" letter-spacing="6">GUARD</text>
+</svg>

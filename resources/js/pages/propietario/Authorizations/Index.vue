@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -16,8 +16,6 @@ interface Authorization {
 }
 
 defineProps<{ authorizations: Authorization[] }>();
-
-const { props: pageProps } = usePage<{ flash?: { success?: string } }>();
 
 function destroy(id: number) {
     if (confirm('¿Eliminar esta autorización?')) {
@@ -55,14 +53,6 @@ const typeLabel: Record<string, string> = {
                 <Link href="/propietario/authorizations/create">
                     <Button>+ Nueva Autorización</Button>
                 </Link>
-            </div>
-
-            <!-- Flash -->
-            <div
-                v-if="pageProps.flash?.success"
-                class="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800"
-            >
-                {{ pageProps.flash.success }}
             </div>
 
             <!-- Vacío -->

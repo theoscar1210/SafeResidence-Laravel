@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,8 +16,6 @@ interface Entry {
 }
 
 const props = defineProps<{ inside: Entry[] }>();
-
-const { props: pageProps } = usePage<{ flash?: { success?: string } }>();
 
 const selected = ref<number[]>([]);
 
@@ -99,14 +97,6 @@ const typeLabel: Record<string, string> = {
                 </Button>
             </div>
 
-            <!-- Flash success -->
-            <div
-                v-if="pageProps.flash?.success"
-                class="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800"
-            >
-                {{ pageProps.flash.success }}
-            </div>
-
             <!-- Sin personas dentro -->
             <div
                 v-if="inside.length === 0"
@@ -124,6 +114,7 @@ const typeLabel: Record<string, string> = {
                         placeholder="Buscar por nombre, cédula o apartamento..."
                         class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground sm:max-w-sm"
                     />
+                    <div class="flex gap-3">
                     <button
                         @click="toggleAll"
                         class="text-sm text-primary underline-offset-4 hover:underline"
@@ -134,6 +125,12 @@ const typeLabel: Record<string, string> = {
                                 : 'Seleccionar todos'
                         }}
                     </button>
+                    <button
+                        v-if="selected.length > 0"
+                        @click="selected = []"
+                        class="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                    >Limpiar selección</button>
+                    </div>
                 </div>
 
                 <!-- Lista de personas dentro -->

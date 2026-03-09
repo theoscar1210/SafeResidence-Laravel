@@ -15,15 +15,16 @@ defineProps<Props>();
 <template>
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 40 42"
+        viewBox="0 0 52 58"
         :class="className"
         v-bind="$attrs"
+        fill="none"
     >
-        <path
-            fill="currentColor"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M17.2 5.633 8.6.855 0 5.633v26.51l16.2 9 16.2-9v-8.442l7.6-4.223V9.856l-8.6-4.777-8.6 4.777V18.3l-5.6 3.111V5.633ZM38 18.301l-5.6 3.11v-6.157l5.6-3.11V18.3Zm-1.06-7.856-5.54 3.078-5.54-3.079 5.54-3.078 5.54 3.079ZM24.8 18.3v-6.157l5.6 3.111v6.158L24.8 18.3Zm-1 1.732 5.54 3.078-13.14 7.302-5.54-3.078 13.14-7.3v-.002Zm-16.2 7.89 7.6 4.222V38.3L2 30.966V7.92l5.6 3.111v16.892ZM8.6 9.3 3.06 6.222 8.6 3.143l5.54 3.08L8.6 9.3Zm21.8 15.51-13.2 7.334V38.3l13.2-7.334v-6.156ZM9.6 11.034l5.6-3.11v14.6l-5.6 3.11v-14.6Z"
-        />
+        <polygon points="26,2 49,14.5 49,43.5 26,56 3,43.5 3,14.5" fill="#1E6FFF" fill-opacity="0.15"/>
+        <polygon points="26,2 49,14.5 49,43.5 26,56 3,43.5 3,14.5" fill="none" stroke="#1E6FFF" stroke-width="2"/>
+        <path d="M18 30 C18 23.37 21.58 18 26 18 C30.42 18 34 23.37 34 30" stroke="#00D9B8" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="19" y="29" width="14" height="12" rx="2.5" fill="#1E6FFF"/>
+        <circle cx="26" cy="35" r="2" fill="#00D9B8"/>
+        <line x1="26" y1="35" x2="26" y2="38" stroke="#00D9B8" stroke-width="1.6" stroke-linecap="round"/>
     </svg>
 </template>

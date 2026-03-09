@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import {
+    Activity,
+    Building2,
+    ClipboardList,
+    Shield,
+    Users,
+} from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { Auth } from '@/types';
@@ -29,129 +36,164 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
     autorizado: 'secondary',
     visitante: 'outline',
 };
+const typeLabel: Record<string, string> = {
+    propietario: 'Propietario',
+    autorizado: 'Autorizado',
+    visitante: 'Visitante',
+    residente: 'Residente',
+};
 </script>
 
 <template>
     <AppLayout>
         <Head title="Panel Administrador" />
-        <div class="flex flex-col gap-6 p-4 sm:p-6">
-            <div>
-                <h1 class="text-2xl font-bold">Panel de Administración</h1>
-                <p class="text-muted-foreground">
-                    Bienvenido, {{ auth.user.first_name }}
+        <div class="flex flex-col gap-5 p-4 sm:p-6">
+
+            <!-- Header futurista -->
+            <div class="page-header">
+                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">ACCESO · GUARD</p>
+                <h1 class="mt-1 text-2xl font-bold text-foreground">Panel de Administración</h1>
+                <p class="mt-0.5 text-sm text-muted-foreground">
+                    Bienvenido, <span class="font-semibold text-foreground">{{ auth.user.first_name }}</span>
                 </p>
             </div>
 
+            <!-- Stats principales -->
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Dentro ahora</p>
-                    <p class="text-4xl font-bold text-primary">
-                        {{ stats.inside }}
-                    </p>
-                    <p class="mt-1 text-xs text-muted-foreground">
-                        {{ stats.entries_today }} ingresos hoy
-                    </p>
+                <div class="stat-card stat-card-accent">
+                    <div class="absolute right-4 top-4 rounded-xl bg-primary/15 p-2">
+                        <Activity class="h-4 w-4 text-primary" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-primary">Dentro ahora</p>
+                    <p class="mt-1.5 text-4xl font-bold tracking-tight text-primary">{{ stats.inside }}</p>
+                    <p class="mt-1 text-xs text-muted-foreground">{{ stats.entries_today }} ingresos hoy</p>
                 </div>
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Propietarios</p>
-                    <p class="text-4xl font-bold">
-                        {{ stats.by_type.propietario }}
-                    </p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-blue-500/10 p-2">
+                        <Users class="h-4 w-4 text-blue-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Propietarios</p>
+                    <p class="mt-1.5 text-4xl font-bold tracking-tight">{{ stats.by_type.propietario }}</p>
+                    <p class="mt-1 text-xs text-muted-foreground">dentro del edificio</p>
                 </div>
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Autorizados</p>
-                    <p class="text-4xl font-bold">
-                        {{ stats.by_type.autorizado }}
-                    </p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-green-500/10 p-2">
+                        <Shield class="h-4 w-4 text-green-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Autorizados</p>
+                    <p class="mt-1.5 text-4xl font-bold tracking-tight">{{ stats.by_type.autorizado }}</p>
+                    <p class="mt-1 text-xs text-muted-foreground">dentro del edificio</p>
                 </div>
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Visitantes</p>
-                    <p class="text-4xl font-bold">
-                        {{ stats.by_type.visitante }}
-                    </p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-amber-500/10 p-2">
+                        <Users class="h-4 w-4 text-amber-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Visitantes</p>
+                    <p class="mt-1.5 text-4xl font-bold tracking-tight">{{ stats.by_type.visitante }}</p>
+                    <p class="mt-1 text-xs text-muted-foreground">dentro del edificio</p>
                 </div>
             </div>
 
+            <!-- Stats secundarias -->
             <div class="grid gap-4 sm:grid-cols-3">
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">
-                        Usuarios registrados
-                    </p>
-                    <p class="text-3xl font-bold">{{ stats.users }}</p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-violet-500/10 p-2">
+                        <Users class="h-4 w-4 text-violet-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Usuarios registrados</p>
+                    <p class="mt-1.5 text-3xl font-bold tracking-tight">{{ stats.users }}</p>
                 </div>
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">Inmuebles</p>
-                    <p class="text-3xl font-bold">{{ stats.properties }}</p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-teal-500/10 p-2">
+                        <Building2 class="h-4 w-4 text-teal-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Inmuebles</p>
+                    <p class="mt-1.5 text-3xl font-bold tracking-tight">{{ stats.properties }}</p>
                 </div>
-                <div class="rounded-xl border bg-card p-5 shadow-sm">
-                    <p class="text-sm text-muted-foreground">
-                        Autorizaciones activas
-                    </p>
-                    <p class="text-3xl font-bold">{{ stats.authorizations }}</p>
+                <div class="stat-card">
+                    <div class="absolute right-4 top-4 rounded-xl bg-emerald-500/10 p-2">
+                        <Shield class="h-4 w-4 text-emerald-500" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">Autorizaciones activas</p>
+                    <p class="mt-1.5 text-3xl font-bold tracking-tight">{{ stats.authorizations }}</p>
                 </div>
             </div>
 
-            <div class="overflow-x-auto rounded-xl border bg-card shadow-sm">
-                <div class="border-b px-5 py-4">
-                    <h2 class="font-semibold">Últimos ingresos del día</h2>
+            <!-- Accesos rápidos -->
+            <div class="grid gap-3 sm:grid-cols-3">
+                <Link href="/admin/users"
+                    class="flex items-center gap-4 rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-transparent p-4 transition-all hover:border-violet-400 hover:shadow-[0_4px_20px_rgba(139,92,246,0.12)]"
+                >
+                    <div class="rounded-xl bg-violet-500 p-2.5 shrink-0"><Users class="h-5 w-5 text-white" /></div>
+                    <div class="min-w-0">
+                        <p class="font-semibold truncate">Gestionar Usuarios</p>
+                        <p class="text-xs text-muted-foreground">{{ stats.users }} usuarios</p>
+                    </div>
+                </Link>
+                <Link href="/admin/properties"
+                    class="flex items-center gap-4 rounded-xl border border-teal-200 bg-gradient-to-br from-teal-50 to-transparent p-4 transition-all hover:border-teal-400 hover:shadow-[0_4px_20px_rgba(20,184,166,0.12)]"
+                >
+                    <div class="rounded-xl bg-teal-500 p-2.5 shrink-0"><Building2 class="h-5 w-5 text-white" /></div>
+                    <div class="min-w-0">
+                        <p class="font-semibold truncate">Inmuebles</p>
+                        <p class="text-xs text-muted-foreground">{{ stats.properties }} registrados</p>
+                    </div>
+                </Link>
+                <Link href="/admin/entries"
+                    class="flex items-center gap-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-4 transition-all hover:border-primary/40 hover:shadow-[0_4px_20px_rgba(30,111,255,0.12)]"
+                >
+                    <div class="rounded-xl bg-primary p-2.5 shrink-0"><ClipboardList class="h-5 w-5 text-white" /></div>
+                    <div class="min-w-0">
+                        <p class="font-semibold truncate">Historial de Ingresos</p>
+                        <p class="text-xs text-muted-foreground">{{ stats.entries_today }} hoy</p>
+                    </div>
+                </Link>
+            </div>
+
+            <!-- Tabla últimos ingresos -->
+            <div class="overflow-hidden rounded-xl border border-primary/10 bg-card shadow-sm">
+                <div class="flex items-center justify-between border-b border-primary/10 bg-primary/[0.03] px-5 py-4">
+                    <div class="flex items-center gap-2">
+                        <ClipboardList class="h-4 w-4 text-primary" />
+                        <h2 class="font-semibold">Últimos ingresos del día</h2>
+                        <span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">{{ recent.length }}</span>
+                    </div>
                 </div>
-                <table class="w-full text-sm">
-                    <thead class="bg-muted/50">
-                        <tr>
-                            <th class="px-5 py-3 text-left font-medium">
-                                Nombre
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium">
-                                Apto
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium">
-                                Tipo
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium">
-                                Hora
-                            </th>
-                            <th class="px-5 py-3 text-left font-medium">
-                                Estado
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="e in recent"
-                            :key="e.id"
-                            class="border-t hover:bg-muted/30"
-                        >
-                            <td class="px-5 py-3 font-medium">
-                                {{ e.full_name }}
-                            </td>
-                            <td class="px-5 py-3">{{ e.apartment }}</td>
-                            <td class="px-5 py-3">
-                                <Badge :variant="typeVariant[e.type]">{{
-                                    e.type
-                                }}</Badge>
-                            </td>
-                            <td class="px-5 py-3">{{ e.entry_at }}</td>
-                            <td class="px-5 py-3">
-                                <span
-                                    v-if="e.is_inside"
-                                    class="font-medium text-green-600"
-                                    >● Dentro</span
-                                >
-                                <span v-else class="text-muted-foreground"
-                                    >Salió</span
-                                >
-                            </td>
-                        </tr>
-                        <tr v-if="recent.length === 0">
-                            <td
-                                colspan="5"
-                                class="px-5 py-8 text-center text-muted-foreground"
-                            >
-                                No hay ingresos hoy.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apto</th>
+                                <th>Tipo</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="e in recent" :key="e.id">
+                                <td class="px-5 py-3 font-medium">{{ e.full_name }}</td>
+                                <td class="px-5 py-3 text-muted-foreground">{{ e.apartment }}</td>
+                                <td class="px-5 py-3">
+                                    <Badge :variant="typeVariant[e.type]">{{ typeLabel[e.type] ?? e.type }}</Badge>
+                                </td>
+                                <td class="px-5 py-3 font-mono text-xs">{{ e.entry_at }}</td>
+                                <td class="px-5 py-3">
+                                    <span v-if="e.is_inside" class="inline-flex items-center gap-1.5 font-medium text-emerald-600">
+                                        <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
+                                        Dentro
+                                    </span>
+                                    <span v-else class="text-muted-foreground">Salió</span>
+                                </td>
+                            </tr>
+                            <tr v-if="recent.length === 0">
+                                <td colspan="5" class="px-5 py-10 text-center text-muted-foreground">
+                                    No hay ingresos registrados hoy.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </AppLayout>

@@ -116,15 +116,15 @@
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
-    --sidebar-background: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
+    --sidebar-background: #071428;
+    --sidebar-foreground: hsl(220 40% 88%);
     --sidebar-primary: #1E6FFF;
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(0 0% 94%);
-    --sidebar-accent-foreground: hsl(0 0% 30%);
-    --sidebar-border: hsl(0 0% 91%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(0 0% 98%);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: hsl(220 100% 60% / 0.15);
+    --sidebar-accent-foreground: hsl(220 40% 95%);
+    --sidebar-border: hsl(220 40% 95% / 0.08);
+    --sidebar-ring: #1E6FFF;
+    --sidebar: #071428;
 }
 
 .dark {
@@ -170,4 +170,78 @@
     body {
         @apply bg-background text-foreground;
     }
+    h1, h2 {
+        font-family: 'Syne', ui-sans-serif, sans-serif;
+    }
+}
+
+/* Utilidades futuristas globales */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(30, 111, 255, 0.18);
+    background: var(--card);
+    padding: 1.25rem;
+    box-shadow: 0 2px 16px rgba(30, 111, 255, 0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+    border-color: rgba(30, 111, 255, 0.38);
+    box-shadow: 0 4px 28px rgba(30, 111, 255, 0.12);
+}
+.stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(30,111,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+}
+.stat-card-accent {
+    border-color: rgba(30, 111, 255, 0.35);
+    background: linear-gradient(135deg, rgba(30,111,255,0.06) 0%, var(--card) 60%);
+    box-shadow: 0 4px 28px rgba(30, 111, 255, 0.14);
+}
+
+.page-header {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgba(30, 111, 255, 0.18);
+    background: linear-gradient(135deg, rgba(30,111,255,0.07) 0%, rgba(30,111,255,0.02) 50%, var(--card) 100%);
+    padding: 1.5rem;
+    box-shadow: 0 2px 20px rgba(30, 111, 255, 0.07);
+}
+.page-header::after {
+    content: '';
+    position: absolute;
+    right: -3rem;
+    top: -3rem;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 9999px;
+    background: rgba(30,111,255,0.12);
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.data-table thead th {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    background: rgba(30,111,255,0.04);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(30,111,255,0.1);
+}
+.data-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.15s;
+}
+.data-table tbody tr:hover {
+    background: rgba(30,111,255,0.03);
+}
+.data-table tbody tr:last-child {
+    border-bottom: none;
 }

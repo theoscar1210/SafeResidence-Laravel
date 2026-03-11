@@ -56,6 +56,7 @@ const navByRole: Record<string, NavItem[]> = {
     Residente: [
         { title: 'Dashboard', href: '/residente/dashboard', icon: LayoutGrid },
         { title: 'Mi Carnet', href: '/carnet', icon: CreditCard },
+        { title: 'Mis Autorizaciones', href: '/residente/authorizations', icon: Shield },
         { title: 'Comunicados', href: '/announcements', icon: Bell },
     ],
 };

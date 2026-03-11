@@ -13,6 +13,7 @@ use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAutho
 use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
 use App\Http\Controllers\Propietario\HistoryController as PropietarioHistoryController;
 use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\Residente\AuthorizationController as ResidenteAuthorizationController;
 use App\Http\Controllers\Residente\DashboardController as ResidenteDashboardController;
 use App\Http\Controllers\Vigilante\AuthorizationController as VigilanteAuthorizationController;
 use App\Http\Controllers\Vigilante\DashboardController as VigDashboardController;
@@ -93,6 +94,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Residente
     Route::middleware('role:Residente')->prefix('residente')->name('residente.')->group(function () {
         Route::get('dashboard', [ResidenteDashboardController::class, 'index'])->name('dashboard');
+        Route::get('authorizations', [ResidenteAuthorizationController::class, 'index'])->name('authorizations.index');
+        Route::get('authorizations/create', [ResidenteAuthorizationController::class, 'create'])->name('authorizations.create');
+        Route::post('authorizations', [ResidenteAuthorizationController::class, 'store'])->name('authorizations.store');
+        Route::delete('authorizations/{authorization}', [ResidenteAuthorizationController::class, 'destroy'])->name('authorizations.destroy');
     });
 });
 

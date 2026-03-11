@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,7 +32,7 @@ class AnnouncementController extends Controller
         return Inertia::render('Announcements/Index', compact('announcements'));
     }
 
-    public function markRead(Request $request, int $id): JsonResponse
+    public function markRead(Request $request, int $id): RedirectResponse
     {
         $user = $request->user();
 
@@ -41,6 +41,6 @@ class AnnouncementController extends Controller
             $user->id => ['read_at' => now()],
         ]);
 
-        return response()->json(['ok' => true]);
+        return back();
     }
 }

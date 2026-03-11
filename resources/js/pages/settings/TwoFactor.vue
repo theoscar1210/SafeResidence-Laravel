@@ -59,10 +59,7 @@ onUnmounted(() => {
                     <Badge variant="destructive">Desactivada</Badge>
 
                     <p class="text-muted-foreground">
-                        When you enable two-factor authentication, you will be
-                        prompted for a secure pin during login. This pin can be
-                        retrieved from a TOTP-supported application on your
-                        phone.
+                        Al activar la autenticación en dos pasos, se te pedirá un código de seguridad durante el inicio de sesión. Este código lo puedes obtener desde una aplicación compatible con TOTP en tu teléfono.
                     </p>
 
                     <div>
@@ -70,7 +67,7 @@ onUnmounted(() => {
                             v-if="hasSetupData"
                             @click="showSetupModal = true"
                         >
-                            <ShieldCheck />Continue setup
+                            <ShieldCheck />Continuar configuración
                         </Button>
                         <Form
                             v-else
@@ -92,10 +89,7 @@ onUnmounted(() => {
                     <Badge variant="default">Activada</Badge>
 
                     <p class="text-muted-foreground">
-                        With two-factor authentication enabled, you will be
-                        prompted for a secure, random pin during login, which
-                        you can retrieve from the TOTP-supported application on
-                        your phone.
+                        Con la autenticación en dos pasos activada, se te solicitará un código seguro y aleatorio al iniciar sesión, el cual puedes obtener desde la aplicación TOTP en tu teléfono.
                     </p>
 
                     <TwoFactorRecoveryCodes />
@@ -108,7 +102,7 @@ onUnmounted(() => {
                                 :disabled="processing"
                             >
                                 <ShieldBan />
-                                Disable 2FA
+                                Desactivar 2FA
                             </Button>
                         </Form>
                     </div>

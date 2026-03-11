@@ -96,8 +96,7 @@ const user = computed(() => page.props.auth.user);
                             v-if="status === 'verification-link-sent'"
                             class="mt-2 text-sm font-medium text-green-600"
                         >
-                            Se ha enviado un enlace de verificación a tu correo
-                            address.
+                            Se ha enviado un enlace de verificación a tu correo electrónico.
                         </div>
                     </div>
 
@@ -118,7 +117,7 @@ const user = computed(() => page.props.auth.user);
                                 v-show="recentlySuccessful"
                                 class="text-sm text-neutral-600"
                             >
-                                Saved.
+                                Guardado.
                             </p>
                         </Transition>
                     </div>

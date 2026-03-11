@@ -37,6 +37,7 @@ interface Carnet {
     role: string;
     property: Property | null;
     family: FamilyMember[];
+    avatar_url: string | null;
 }
 
 const props = defineProps<{ carnet: Carnet }>();
@@ -125,8 +126,9 @@ const typeLabel: Record<string, string> = {
 
                         <!-- Avatar + Name -->
                         <div class="flex items-center gap-4">
-                            <div :class="['flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-xl font-black text-white shadow-lg', carnet.role === 'Propietario' ? 'bg-blue-600 shadow-blue-600/30' : 'bg-violet-600 shadow-violet-600/30']">
-                                {{ initials.toUpperCase() }}
+                            <div :class="['relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl text-xl font-black text-white shadow-lg', carnet.role === 'Propietario' ? 'bg-blue-600 shadow-blue-600/30' : 'bg-violet-600 shadow-violet-600/30']">
+                                <img v-if="carnet.avatar_url" :src="carnet.avatar_url" alt="Foto" class="h-full w-full object-cover" />
+                                <span v-else>{{ initials.toUpperCase() }}</span>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[10px] font-bold uppercase tracking-widest text-white/40">Nombre completo</p>

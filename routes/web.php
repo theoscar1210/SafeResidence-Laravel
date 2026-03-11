@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CarnetController;
+use App\Http\Controllers\Settings\AvatarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
 use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
@@ -37,6 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Comunicados (propietario y residente)
     Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
     Route::post('announcements/{announcement}/read', [AnnouncementController::class, 'markRead'])->name('announcements.read');
+
+    // Avatar / foto de perfil
+    Route::post('settings/avatar', [AvatarController::class, 'update'])->name('settings.avatar.update');
+    Route::delete('settings/avatar', [AvatarController::class, 'destroy'])->name('settings.avatar.destroy');
 
     // Push subscriptions (cualquier usuario autenticado)
     Route::post('push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');

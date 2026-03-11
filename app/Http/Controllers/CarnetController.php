@@ -55,6 +55,7 @@ class CarnetController extends Controller
             'role'       => $role,
             'property'   => $property,
             'family'     => $family,
+            'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) : null,
         ];
 
         return Inertia::render('Carnet', compact('carnet'));

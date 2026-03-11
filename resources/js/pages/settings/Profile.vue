@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Form, Head, Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Camera, Trash2 } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/DeleteUser.vue';
 import Heading from '@/components/Heading.vue';
@@ -29,7 +30,45 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ];
 
 const page = usePage();
-const user = computed(() => page.props.auth.user);
+const user = computed(() => page.props.auth.user as any);
+
+// Avatar upload
+const fileInput = ref<HTMLInputElement | null>(null);
+const previewUrl = ref<string | null>(null);
+const uploading = ref(false);
+
+function pickFile() {
+    fileInput.value?.click();
+}
+
+function onFileChange(e: Event) {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    previewUrl.value = URL.createObjectURL(file);
+    uploadAvatar(file);
+}
+
+function uploadAvatar(file: File) {
+    uploading.value = true;
+    const data = new FormData();
+    data.append('avatar', file);
+    router.post('/settings/avatar', data, {
+        forceFormData: true,
+        preserveScroll: true,
+        onFinish: () => { uploading.value = false; },
+    });
+}
+
+function removeAvatar() {
+    router.delete('/settings/avatar', { preserveScroll: true });
+    previewUrl.value = null;
+}
+
+const avatarSrc = computed(() => previewUrl.value ?? user.value?.avatar_url ?? null);
+const avatarInitials = computed(() => {
+    const name = user.value?.name ?? '';
+    return name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase();
+});
 </script>
 
 <template>
@@ -40,6 +79,47 @@ const user = computed(() => page.props.auth.user);
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
+
+                <!-- Foto de perfil -->
+                <Heading
+                    variant="small"
+                    title="Foto de perfil"
+                    description="Esta foto aparecerá en tu carnet digital y en el menú lateral"
+                />
+                <div class="flex items-center gap-5">
+                    <div class="relative">
+                        <div class="h-20 w-20 overflow-hidden rounded-full border-2 border-primary/20 bg-muted">
+                            <img v-if="avatarSrc" :src="avatarSrc" alt="Avatar" class="h-full w-full object-cover" />
+                            <div v-else class="flex h-full w-full items-center justify-center text-xl font-bold text-muted-foreground">
+                                {{ avatarInitials }}
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            @click="pickFile"
+                            :disabled="uploading"
+                            class="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background shadow-sm transition hover:bg-muted disabled:opacity-50"
+                        >
+                            <Camera class="h-3.5 w-3.5 text-muted-foreground" />
+                        </button>
+                        <input ref="fileInput" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" @change="onFileChange" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <Button type="button" variant="outline" size="sm" @click="pickFile" :disabled="uploading">
+                            {{ uploading ? 'Subiendo...' : 'Cambiar foto' }}
+                        </Button>
+                        <button
+                            v-if="avatarSrc"
+                            type="button"
+                            @click="removeAvatar"
+                            class="flex items-center gap-1.5 text-xs text-destructive hover:underline"
+                        >
+                            <Trash2 class="h-3 w-3" /> Eliminar foto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Información del perfil -->
                 <Heading
                     variant="small"
                     title="Información del perfil"

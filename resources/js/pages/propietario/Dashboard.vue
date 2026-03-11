@@ -7,6 +7,7 @@ import {
     Users,
 } from 'lucide-vue-next';
 import AppLayout from '@/layouts/AppLayout.vue';
+import PushNotificationToggle from '@/components/PushNotificationToggle.vue';
 import type { Auth } from '@/types';
 
 const { auth } = usePage<{ auth: Auth }>().props;
@@ -59,12 +60,15 @@ const typeClass: Record<string, string> = {
         <div class="flex flex-col gap-5 p-4 sm:p-6">
 
             <!-- Header futurista -->
-            <div class="page-header">
-                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">ACCESO · GUARD</p>
-                <h1 class="mt-1 text-2xl font-bold">Mi Panel</h1>
-                <p class="mt-0.5 text-sm text-muted-foreground">
-                    Bienvenido, <span class="font-semibold text-foreground">{{ auth.user.first_name }}</span>
-                </p>
+            <div class="flex flex-wrap items-start justify-between gap-3">
+                <div class="page-header">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">ACCESO · GUARD</p>
+                    <h1 class="mt-1 text-2xl font-bold">Mi Panel</h1>
+                    <p class="mt-0.5 text-sm text-muted-foreground">
+                        Bienvenido, <span class="font-semibold text-foreground">{{ auth.user.first_name }}</span>
+                    </p>
+                </div>
+                <PushNotificationToggle />
             </div>
 
             <!-- Stats -->

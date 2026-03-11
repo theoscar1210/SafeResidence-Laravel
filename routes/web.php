@@ -1,14 +1,19 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnouncementController as AdminAnnouncementController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\FamilyMemberController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CarnetController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Propietario\AuthorizationController as PropietarioAuthorizationController;
 use App\Http\Controllers\Propietario\DashboardController as PropietarioDashboardController;
 use App\Http\Controllers\Propietario\HistoryController as PropietarioHistoryController;
+use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\Residente\DashboardController as ResidenteDashboardController;
 use App\Http\Controllers\Vigilante\AuthorizationController as VigilanteAuthorizationController;
 use App\Http\Controllers\Vigilante\DashboardController as VigDashboardController;
 use App\Http\Controllers\Vigilante\EntryController;
@@ -24,6 +29,17 @@ Route::inertia('/', 'Welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Carnet digital (propietario y residente)
+    Route::get('carnet', [CarnetController::class, 'show'])->name('carnet');
+
+    // Comunicados (propietario y residente)
+    Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::post('announcements/{announcement}/read', [AnnouncementController::class, 'markRead'])->name('announcements.read');
+
+    // Push subscriptions (cualquier usuario autenticado)
+    Route::post('push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+    Route::delete('push/subscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
 
     // Administrador
     Route::middleware('role:Administrador')->prefix('admin')->name('admin.')->group(function () {
@@ -42,21 +58,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('family-members', [FamilyMemberController::class, 'store'])->name('family-members.store');
         Route::put('family-members/{familyMember}', [FamilyMemberController::class, 'update'])->name('family-members.update');
         Route::delete('family-members/{familyMember}', [FamilyMemberController::class, 'destroy'])->name('family-members.destroy');
+
+        // Comunicados
+        Route::get('announcements', [AdminAnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('announcements/create', [AdminAnnouncementController::class, 'create'])->name('announcements.create');
+        Route::post('announcements', [AdminAnnouncementController::class, 'store'])->name('announcements.store');
     });
 
     // Vigilante
     Route::middleware('role:Vigilante')->prefix('vigilante')->name('vigilante.')->group(function () {
         Route::get('dashboard', [VigDashboardController::class, 'index'])->name('dashboard');
-        Route::get('entries', [EntryController::class,                  'index'])->name('entries.index');
-        Route::get('entries/create', [EntryController::class,                  'create'])->name('entries.create');
-        Route::post('entries', [EntryController::class,                  'store'])->name('entries.store');
-        Route::get('entries/lookup', [EntryController::class,                  'lookup'])->name('entries.lookup');
-        Route::get('entries/lookup-plate', [EntryController::class,             'lookupByPlate'])->name('entries.lookup-plate');
-        Route::get('exits', [ExitController::class,                   'index'])->name('exits.index');
-        Route::post('exits', [ExitController::class,                   'store'])->name('exits.store');
+        Route::get('entries', [EntryController::class, 'index'])->name('entries.index');
+        Route::get('entries/create', [EntryController::class, 'create'])->name('entries.create');
+        Route::post('entries', [EntryController::class, 'store'])->name('entries.store');
+        Route::get('entries/lookup', [EntryController::class, 'lookup'])->name('entries.lookup');
+        Route::get('entries/lookup-plate', [EntryController::class, 'lookupByPlate'])->name('entries.lookup-plate');
+        Route::get('exits', [ExitController::class, 'index'])->name('exits.index');
+        Route::post('exits', [ExitController::class, 'store'])->name('exits.store');
         Route::get('authorizations', [VigilanteAuthorizationController::class, 'index'])->name('authorizations.index');
-        Route::get('reports', [ReportController::class,                 'index'])->name('reports.index');
-        Route::post('reports/export', [ReportController::class,                 'export'])->name('reports.export');
+        Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::post('reports/export', [ReportController::class, 'export'])->name('reports.export');
     });
 
     // Propietario
@@ -71,7 +92,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Residente
     Route::middleware('role:Residente')->prefix('residente')->name('residente.')->group(function () {
-        Route::inertia('dashboard', 'residente/Dashboard')->name('dashboard');
+        Route::get('dashboard', [ResidenteDashboardController::class, 'index'])->name('dashboard');
     });
 });
 

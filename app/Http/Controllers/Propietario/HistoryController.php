@@ -13,7 +13,7 @@ class HistoryController extends Controller
     public function index(Request $request): Response
     {
         $user = $request->user();
-        $apartment = $user->apartment?->number;
+        $apartment = $user->property_number;
 
         $entries = Entry::with('exit')
             ->when($apartment, fn ($q) => $q->where('apartment', $apartment))

@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function index(Request $request): Response
     {
         $user = $request->user();
-        $apartment = $user->apartment?->number;
+        $apartment = $user->property_number;
 
         $stats = [
             'authorizations_active' => Authorization::where('user_id', $user->id)->active()->count(),

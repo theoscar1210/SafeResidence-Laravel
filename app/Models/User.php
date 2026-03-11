@@ -84,6 +84,12 @@ class User extends Authenticatable
         return $this->hasMany(Entry::class);
     }
 
+    /** Push subscriptions para notificaciones web */
+    public function pushSubscriptions(): HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
+
     /**
      * Obtiene el número de inmueble principal de este usuario.
      * Para propietario: primera propiedad propia.

@@ -70,8 +70,8 @@ class EntryController extends Controller
 
         if ($activeEntry) {
             return back()->withErrors([
-                'cedula' => 'Esta persona ya tiene un ingreso activo sin salida registrada.',
-            ]);
+                'active_entry' => 'Ya hay un ingreso activo para esta cédula. Registra la salida antes de permitir un nuevo ingreso.',
+            ])->withInput();
         }
 
         // Marcar autorización como usada si existe

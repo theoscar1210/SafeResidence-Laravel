@@ -55,8 +55,9 @@ class ExitController extends Controller
         }
 
         $count = count($request->entry_ids);
+        $msg = $count === 1 ? '1 salida registrada.' : "{$count} salidas registradas.";
 
         return redirect()->route('vigilante.exits.index')
-            ->with('success', "{$count} salida(s) registrada(s) correctamente.");
+            ->with('success', $msg);
     }
 }

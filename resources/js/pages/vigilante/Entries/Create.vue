@@ -2,6 +2,7 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import {
     AlertCircle,
+    AlertTriangle,
     BadgeCheck,
     CheckCircle2,
     Loader2,
@@ -184,6 +185,18 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                 </p>
             </div>
 
+            <!-- Alerta: INGRESO ACTIVO (bloqueo prominente) -->
+            <div
+                v-if="form.errors.active_entry"
+                class="mb-4 flex items-start gap-3 rounded-xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm text-red-900"
+            >
+                <AlertTriangle class="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
+                <div>
+                    <p class="font-bold text-base">Ingreso duplicado</p>
+                    <p class="mt-0.5 text-red-700">{{ form.errors.active_entry }}</p>
+                </div>
+            </div>
+
             <!-- Persona conocida en el sistema -->
             <Transition name="alert">
                 <div
@@ -289,7 +302,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                             ✓ Autorizado
                         </span>
                     </div>
-                    <InputError :message="form.errors.cedula" />
+                    <InputError :message="form.errors.cedula" class="text-xs" />
                 </div>
 
                 <!-- Nombres y apellidos -->

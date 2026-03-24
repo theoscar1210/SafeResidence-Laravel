@@ -20,6 +20,7 @@ class Announcement extends Model
     public function readers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'announcement_user')
-            ->withPivot('read_at');
+            ->withPivot('read_at')
+            ->using(\Illuminate\Database\Eloquent\Relations\Pivot::class);
     }
 }

@@ -268,6 +268,8 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
 
             <form
                 @submit.prevent="submit"
+                autocomplete="off"
+                novalidate
                 class="space-y-5 rounded-xl border bg-card p-6 shadow-sm"
             >
                 <!-- Cédula con indicador de búsqueda -->
@@ -286,7 +288,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                             class="absolute top-2.5 right-3 flex items-center gap-1 text-xs text-muted-foreground"
                         >
                             <Loader2 class="h-3 w-3 animate-spin" />
-                            buscando...
+                            Consultando...
                         </span>
                         <span
                             v-else-if="lookupDone && knownInSystem"
@@ -400,8 +402,7 @@ const needsPlate = computed(() => form.vehicle !== 'ninguno');
                             </span>
                         </div>
                         <p class="text-xs text-muted-foreground">
-                            Si la placa ya tiene ingresos previos, los datos se
-                            completarán automáticamente.
+                            Si la placa tiene ingresos previos, los datos del conductor se completarán automáticamente.
                         </p>
                         <InputError :message="form.errors.plate" />
                     </div>

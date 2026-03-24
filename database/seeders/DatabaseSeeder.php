@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AdminSeeder::class,
             TestUsersSeeder::class,
+            CondominiumDemoSeeder::class,
         ]);
     }
 }

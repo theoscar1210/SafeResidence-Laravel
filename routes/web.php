@@ -16,6 +16,7 @@ use App\Http\Controllers\Propietario\HistoryController as PropietarioHistoryCont
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\Residente\AuthorizationController as ResidenteAuthorizationController;
 use App\Http\Controllers\Residente\DashboardController as ResidenteDashboardController;
+use App\Http\Controllers\Residente\HistoryController as ResidenteHistoryController;
 use App\Http\Controllers\Vigilante\AuthorizationController as VigilanteAuthorizationController;
 use App\Http\Controllers\Vigilante\DashboardController as VigDashboardController;
 use App\Http\Controllers\Vigilante\EntryController;
@@ -103,6 +104,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('authorizations/create', [ResidenteAuthorizationController::class, 'create'])->name('authorizations.create');
         Route::post('authorizations', [ResidenteAuthorizationController::class, 'store'])->name('authorizations.store');
         Route::delete('authorizations/{authorization}', [ResidenteAuthorizationController::class, 'destroy'])->name('authorizations.destroy');
+        Route::get('history', [ResidenteHistoryController::class, 'index'])->name('history.index');
     });
 });
 

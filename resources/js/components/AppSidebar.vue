@@ -13,6 +13,7 @@ import {
     Shield,
     Users,
 } from 'lucide-vue-next';
+
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -57,6 +58,7 @@ const navByRole: Record<string, NavItem[]> = {
         { title: 'Dashboard', href: '/residente/dashboard', icon: LayoutGrid },
         { title: 'Mi Carnet', href: '/carnet', icon: CreditCard },
         { title: 'Mis Autorizaciones', href: '/residente/authorizations', icon: Shield },
+        { title: 'Historial', href: '/residente/history', icon: History },
         { title: 'Comunicados', href: '/announcements', icon: Bell },
     ],
 };

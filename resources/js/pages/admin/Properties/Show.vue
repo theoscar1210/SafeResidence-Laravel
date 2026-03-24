@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -67,6 +68,13 @@ const props = defineProps<{
 
 const activeTab = ref<'datos' | 'propietarios' | 'residente' | 'familiar'>('datos');
 
+// Confirm dialog state
+const confirmOwnerDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const confirmRentalDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const confirmFamilyDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const pendingOwnerId = ref<number | null>(null);
+const pendingFamilyId = ref<number | null>(null);
+
 // --- Edit property form ---
 const editForm = useForm({
     number: props.property.number,
@@ -89,8 +97,13 @@ function assignOwner() {
 }
 
 function removeOwner(userId: number) {
-    if (confirm('¿Quitar este propietario?')) {
-        router.delete(`/admin/properties/${props.property.id}/owners/${userId}`);
+    pendingOwnerId.value = userId;
+    confirmOwnerDialog.value?.show();
+}
+
+function confirmRemoveOwner() {
+    if (pendingOwnerId.value) {
+        router.delete(`/admin/properties/${props.property.id}/owners/${pendingOwnerId.value}`);
     }
 }
 
@@ -104,9 +117,11 @@ function assignTenant() {
 }
 
 function endRental() {
-    if (confirm('¿Finalizar el arrendamiento activo?')) {
-        router.post(`/admin/properties/${props.property.id}/end-rental`);
-    }
+    confirmRentalDialog.value?.show();
+}
+
+function confirmEndRental() {
+    router.post(`/admin/properties/${props.property.id}/end-rental`);
 }
 
 // --- Family member form ---
@@ -126,8 +141,13 @@ function addFamilyMember() {
 }
 
 function removeFamilyMember(id: number) {
-    if (confirm('¿Eliminar este familiar?')) {
-        router.delete(`/admin/family-members/${id}`);
+    pendingFamilyId.value = id;
+    confirmFamilyDialog.value?.show();
+}
+
+function confirmRemoveFamily() {
+    if (pendingFamilyId.value) {
+        router.delete(`/admin/family-members/${pendingFamilyId.value}`);
     }
 }
 
@@ -540,4 +560,26 @@ const relatedUsers = [
             </div>
         </div>
     </AppLayout>
+
+    <ConfirmDialog
+        ref="confirmOwnerDialog"
+        title="¿Quitar propietario?"
+        description="Se eliminará la asignación de este propietario al inmueble."
+        confirm-label="Sí, quitar"
+        @confirm="confirmRemoveOwner"
+    />
+    <ConfirmDialog
+        ref="confirmRentalDialog"
+        title="¿Finalizar arrendamiento?"
+        description="El residente actual perderá acceso al inmueble. Esta acción no se puede deshacer."
+        confirm-label="Sí, finalizar"
+        @confirm="confirmEndRental"
+    />
+    <ConfirmDialog
+        ref="confirmFamilyDialog"
+        title="¿Eliminar familiar?"
+        description="Se eliminará este miembro del núcleo familiar. Su acceso como autorizado dejará de funcionar."
+        confirm-label="Sí, eliminar"
+        @confirm="confirmRemoveFamily"
+    />
 </template>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 
@@ -26,9 +28,17 @@ interface Property {
 
 defineProps<{ properties: Property[] }>();
 
-function destroy(id: number) {
-    if (confirm('¿Eliminar este inmueble?')) {
-        router.delete(`/admin/properties/${id}`);
+const confirmDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const pendingDeleteId = ref<number | null>(null);
+
+function askDestroy(id: number) {
+    pendingDeleteId.value = id;
+    confirmDialog.value?.show();
+}
+
+function confirmDelete() {
+    if (pendingDeleteId.value) {
+        router.delete(`/admin/properties/${pendingDeleteId.value}`);
     }
 }
 
@@ -98,7 +108,7 @@ const typeLabel: Record<string, string> = {
                                     <Button
                                         variant="destructive"
                                         size="sm"
-                                        @click="destroy(p.id)"
+                                        @click="askDestroy(p.id)"
                                     >Eliminar</Button>
                                 </div>
                             </td>
@@ -113,4 +123,12 @@ const typeLabel: Record<string, string> = {
             </div>
         </div>
     </AppLayout>
+
+    <ConfirmDialog
+        ref="confirmDialog"
+        title="¿Eliminar inmueble?"
+        description="Se eliminará el inmueble y todos sus datos asociados. Esta acción no se puede deshacer."
+        confirm-label="Sí, eliminar"
+        @confirm="confirmDelete"
+    />
 </template>

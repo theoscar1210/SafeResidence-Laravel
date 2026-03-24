@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -17,9 +19,17 @@ interface Authorization {
 
 defineProps<{ authorizations: Authorization[] }>();
 
-function destroy(id: number) {
-    if (confirm('¿Eliminar esta autorización?')) {
-        router.delete(`/propietario/authorizations/${id}`);
+const confirmDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const pendingId = ref<number | null>(null);
+
+function askDestroy(id: number) {
+    pendingId.value = id;
+    confirmDialog.value?.show();
+}
+
+function confirmDelete() {
+    if (pendingId.value) {
+        router.delete(`/propietario/authorizations/${pendingId.value}`);
     }
 }
 
@@ -107,7 +117,7 @@ const typeLabel: Record<string, string> = {
                     </div>
                     <button
                         v-if="auth.status === 'activo'"
-                        @click="destroy(auth.id)"
+                        @click="askDestroy(auth.id)"
                         class="shrink-0 self-start rounded-md px-3 py-1.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
                     >
                         Eliminar
@@ -116,4 +126,12 @@ const typeLabel: Record<string, string> = {
             </div>
         </div>
     </AppLayout>
+
+    <ConfirmDialog
+        ref="confirmDialog"
+        title="¿Eliminar autorización?"
+        description="Se eliminará esta autorización. Si la persona ya tiene acceso activo, dejará de estar autorizada."
+        confirm-label="Sí, eliminar"
+        @confirm="confirmDelete"
+    />
 </template>

@@ -2,6 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { X } from 'lucide-vue-next';
 import { ref } from 'vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -20,6 +21,8 @@ interface User {
 const props = defineProps<{ users: User[] }>();
 
 const search = ref('');
+const confirmDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+const pendingDelete = ref<{ id: number; name: string } | null>(null);
 
 const filtered = () =>
     props.users.filter((u) => {
@@ -39,9 +42,15 @@ const roleBadge: Record<string, string> = {
     Residente: 'bg-amber-100 text-amber-800',
 };
 
-function destroy(id: number, name: string) {
-    if (!confirm(`¿Eliminar al usuario "${name}"?`)) return;
-    router.delete(`/admin/users/${id}`, { preserveScroll: true });
+function askDestroy(id: number, name: string) {
+    pendingDelete.value = { id, name };
+    confirmDialog.value?.show();
+}
+
+function confirmDelete() {
+    if (pendingDelete.value) {
+        router.delete(`/admin/users/${pendingDelete.value.id}`, { preserveScroll: true });
+    }
 }
 </script>
 
@@ -140,7 +149,7 @@ function destroy(id: number, name: string) {
                                     <Button
                                         variant="destructive"
                                         size="sm"
-                                        @click="destroy(u.id, u.full_name)"
+                                        @click="askDestroy(u.id, u.full_name)"
                                     >
                                         Eliminar
                                     </Button>
@@ -160,4 +169,12 @@ function destroy(id: number, name: string) {
             </div>
         </div>
     </AppLayout>
+
+    <ConfirmDialog
+        ref="confirmDialog"
+        :title="`¿Eliminar usuario?`"
+        :description="pendingDelete ? `Se eliminará permanentemente a &quot;${pendingDelete.name}&quot;. Esta acción no se puede deshacer.` : ''"
+        confirm-label="Sí, eliminar"
+        @confirm="confirmDelete"
+    />
 </template>

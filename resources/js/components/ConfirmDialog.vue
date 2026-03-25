@@ -11,7 +11,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
     title?: string;
     description?: string;
     confirmLabel?: string;

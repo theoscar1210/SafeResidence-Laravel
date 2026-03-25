@@ -12,7 +12,7 @@ interface Announcement {
     read_at: string | null;
 }
 
-const props = defineProps<{ announcements: Announcement[] }>();
+defineProps<{ announcements: Announcement[] }>();
 
 const marking = ref<number | null>(null);
 

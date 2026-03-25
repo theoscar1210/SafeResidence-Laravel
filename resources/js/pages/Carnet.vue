@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { Head, usePage } from '@inertiajs/vue3';
-import { onMounted, ref } from 'vue';
-import QRCode from 'qrcode';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { Head } from '@inertiajs/vue3';
 import {
     Building2,
     CreditCard,
-    IdCard,
     Phone,
-    User,
     Users,
 } from 'lucide-vue-next';
+import QRCode from 'qrcode';
+import { onMounted, ref } from 'vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 interface Property {
     number: string;
@@ -51,7 +49,7 @@ onMounted(async () => {
             margin: 1,
             color: { dark: '#0f172a', light: '#ffffff' },
         });
-    } catch (_) { /* noop */ }
+    } catch { /* noop */ }
 });
 
 const roleConfig: Record<string, { label: string; color: string; gradient: string; badge: string }> = {

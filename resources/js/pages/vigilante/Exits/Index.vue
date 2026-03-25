@@ -12,6 +12,8 @@ interface Entry {
     apartment: string;
     type: string;
     vehicle: string;
+    plate: string | null;
+    observations: string | null;
     entry_at: string;
 }
 
@@ -66,8 +68,17 @@ const typeVariant: Record<string, 'default' | 'secondary' | 'outline'> = {
 
 const typeLabel: Record<string, string> = {
     propietario: 'Propietario',
+    residente: 'Residente',
     autorizado: 'Autorizado',
     visitante: 'Visitante',
+};
+
+const vehicleLabel: Record<string, string> = {
+    ninguno: '',
+    automovil: '🚗',
+    camioneta: '🚙',
+    moto: '🏍',
+    bicicleta: '🚲',
 };
 </script>
 
@@ -172,19 +183,25 @@ const typeLabel: Record<string, string> = {
                         </div>
 
                         <!-- Info -->
-                        <div class="flex flex-1 items-center justify-between">
-                            <div>
-                                <p class="font-semibold">
-                                    {{ entry.full_name }}
-                                </p>
+                        <div class="flex flex-1 items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="font-semibold">{{ entry.full_name }}</p>
                                 <p class="text-sm text-muted-foreground">
-                                    CC {{ entry.cedula }} · Apto
-                                    {{ entry.apartment }}
+                                    CC {{ entry.cedula }} · Inmueble {{ entry.apartment }}
+                                </p>
+                                <p v-if="entry.plate || (entry.vehicle && entry.vehicle !== 'ninguno')" class="text-xs text-muted-foreground">
+                                    <span v-if="entry.vehicle && entry.vehicle !== 'ninguno'">
+                                        {{ vehicleLabel[entry.vehicle] ?? entry.vehicle }}
+                                    </span>
+                                    <span v-if="entry.plate" class="ml-1 font-mono font-semibold tracking-wider">{{ entry.plate }}</span>
+                                </p>
+                                <p v-if="entry.observations" class="mt-0.5 text-xs italic text-muted-foreground">
+                                    "{{ entry.observations }}"
                                 </p>
                             </div>
-                            <div class="flex flex-col items-end gap-1">
+                            <div class="flex shrink-0 flex-col items-end gap-1">
                                 <Badge :variant="typeVariant[entry.type]">
-                                    {{ typeLabel[entry.type] }}
+                                    {{ typeLabel[entry.type] ?? entry.type }}
                                 </Badge>
                                 <span class="text-xs text-muted-foreground">
                                     Ingresó {{ entry.entry_at }}

@@ -34,12 +34,14 @@ class EntryController extends Controller
                 'registered_by' => $e->registered_by,
             ]);
 
+        // El conteo de "adentro" usa Entry::active() para incluir entradas de días anteriores sin salida
+        $activeAll = Entry::active()->get();
         $stats = [
-            'total' => $entries->count(),
-            'inside' => $entries->where('is_inside', true)->count(),
-            'propietario' => $entries->whereIn('type', ['propietario', 'residente'])->where('is_inside', true)->count(),
-            'autorizado' => $entries->where('type', 'autorizado')->where('is_inside', true)->count(),
-            'visitante' => $entries->where('type', 'visitante')->where('is_inside', true)->count(),
+            'total'        => $entries->count(),
+            'inside'       => $activeAll->count(),
+            'propietario'  => $activeAll->whereIn('type', ['propietario', 'residente'])->count(),
+            'autorizado'   => $activeAll->where('type', 'autorizado')->count(),
+            'visitante'    => $activeAll->where('type', 'visitante')->count(),
         ];
 
         return Inertia::render('vigilante/Entries/Index', compact('entries', 'stats'));
@@ -69,9 +71,9 @@ class EntryController extends Controller
             ->first();
 
         if ($activeEntry) {
-            return back()->withErrors([
+            throw \Illuminate\Validation\ValidationException::withMessages([
                 'active_entry' => 'Ya hay un ingreso activo para esta cédula. Registra la salida antes de permitir un nuevo ingreso.',
-            ])->withInput();
+            ]);
         }
 
         // Marcar autorización como usada si existe

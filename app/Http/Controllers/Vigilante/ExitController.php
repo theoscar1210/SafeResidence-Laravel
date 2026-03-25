@@ -19,13 +19,15 @@ class ExitController extends Controller
             ->orderByDesc('entry_at')
             ->get()
             ->map(fn ($e) => [
-                'id' => $e->id,
-                'full_name' => $e->full_name,
-                'cedula' => $e->cedula,
-                'apartment' => $e->apartment,
-                'type' => $e->type,
-                'vehicle' => $e->vehicle,
-                'entry_at' => $e->entry_at->format('d/m/Y H:i'),
+                'id'           => $e->id,
+                'full_name'    => $e->full_name,
+                'cedula'       => $e->cedula,
+                'apartment'    => $e->apartment,
+                'type'         => $e->type,
+                'vehicle'      => $e->vehicle,
+                'plate'        => $e->plate,
+                'observations' => $e->observations,
+                'entry_at'     => $e->entry_at->format('d/m/Y H:i'),
             ]);
 
         return Inertia::render('vigilante/Exits/Index', compact('inside'));

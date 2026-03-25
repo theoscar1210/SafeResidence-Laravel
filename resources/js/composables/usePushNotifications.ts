@@ -1,5 +1,5 @@
-import { ref } from 'vue';
 import axios from 'axios';
+import { ref } from 'vue';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ?? '';
 

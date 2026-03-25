@@ -6,8 +6,8 @@ import {
     Shield,
     Users,
 } from 'lucide-vue-next';
-import AppLayout from '@/layouts/AppLayout.vue';
 import PushNotificationToggle from '@/components/PushNotificationToggle.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import type { Auth } from '@/types';
 
 const { auth } = usePage<{ auth: Auth }>().props;
